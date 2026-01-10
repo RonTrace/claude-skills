@@ -1,0 +1,2357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadcn-Style Component Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       CSS VARIABLES & THEME
+       ======================================== */
+    :root {
+      /* Gray palette */
+      --gray-50: #fafafa;
+      --gray-100: #f4f4f5;
+      --gray-200: #e4e4e7;
+      --gray-300: #d4d4d8;
+      --gray-400: #a1a1aa;
+      --gray-500: #71717a;
+      --gray-600: #52525b;
+      --gray-700: #3f3f46;
+      --gray-800: #27272a;
+      --gray-900: #18181b;
+      --gray-950: #09090b;
+
+      /* Semantic colors */
+      --background: #ffffff;
+      --foreground: var(--gray-950);
+      --card: #ffffff;
+      --card-foreground: var(--gray-950);
+      --popover: #ffffff;
+      --popover-foreground: var(--gray-950);
+      --primary: #393C3C;
+      --primary-foreground: #ffffff;
+      --btn-primary: #18929A;
+      --btn-primary-hover: #147a80;
+      --secondary: var(--gray-100);
+      --secondary-foreground: var(--gray-900);
+      --muted: var(--gray-100);
+      --muted-foreground: var(--gray-500);
+      --accent: var(--gray-100);
+      --accent-foreground: var(--gray-900);
+      --destructive: #ef4444;
+      --destructive-foreground: #fef2f2;
+      --success: #22c55e;
+      --success-foreground: #f0fdf4;
+      --warning: #f59e0b;
+      --warning-foreground: #fffbeb;
+      --border: var(--gray-200);
+      --input: var(--gray-200);
+      --ring: var(--gray-950);
+
+      /* Spacing */
+      --spacing: 4px;
+      --radius-sm: 6px;
+      --radius: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 18px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    .dark {
+      --background: var(--gray-950);
+      --foreground: var(--gray-50);
+      --card: var(--gray-900);
+      --card-foreground: var(--gray-50);
+      --popover: var(--gray-900);
+      --popover-foreground: var(--gray-50);
+      --primary: #393C3C;
+      --primary-foreground: #ffffff;
+      --btn-primary: #18929A;
+      --btn-primary-hover: #147a80;
+      --secondary: var(--gray-800);
+      --secondary-foreground: var(--gray-50);
+      --muted: var(--gray-800);
+      --muted-foreground: var(--gray-400);
+      --accent: var(--gray-800);
+      --accent-foreground: var(--gray-50);
+      --border: var(--gray-800);
+      --input: var(--gray-800);
+      --ring: var(--gray-300);
+    }
+
+    /* ========================================
+       BASE STYLES
+       ======================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--background);
+      color: var(--foreground);
+      line-height: 1.5;
+    }
+
+    /* ========================================
+       LAYOUT UTILITIES
+       ======================================== */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      color: var(--muted-foreground);
+      margin-bottom: 24px;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .component-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+
+    .component-box h3 {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .flex-wrap { flex-wrap: wrap; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-1 { gap: 4px; }
+    .gap-2 { gap: 8px; }
+    .gap-3 { gap: 12px; }
+    .gap-4 { gap: 16px; }
+    .gap-6 { gap: 24px; }
+    .w-full { width: 100%; }
+    .text-center { text-align: center; }
+    .text-sm { font-size: 0.875rem; }
+    .text-xs { font-size: 0.75rem; }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+
+    /* ========================================
+       BUTTONS
+       ======================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1;
+      padding: 10px 16px;
+      border-radius: 9999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Button variants */
+    .btn-default {
+      background: var(--btn-primary);
+      color: var(--primary-foreground);
+      border-color: var(--btn-primary);
+    }
+    .btn-default:hover {
+      background: var(--btn-primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+    .btn-secondary:hover {
+      background: var(--gray-200);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--foreground);
+      border-color: var(--border);
+    }
+    .btn-outline:hover {
+      background: var(--accent);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--foreground);
+    }
+    .btn-ghost:hover {
+      background: var(--accent);
+    }
+
+    .btn-destructive {
+      background: var(--destructive);
+      color: white;
+    }
+    .btn-destructive:hover {
+      background: #dc2626;
+    }
+
+    .btn-link {
+      background: transparent;
+      color: var(--foreground);
+      text-decoration: underline;
+      padding: 0;
+    }
+    .btn-link:hover {
+      text-decoration: none;
+    }
+
+    /* Button sizes */
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 1rem;
+    }
+
+    .btn-icon {
+      padding: 10px;
+      width: 40px;
+      height: 40px;
+    }
+
+    .btn-icon-sm {
+      padding: 6px;
+      width: 32px;
+      height: 32px;
+    }
+
+    /* ========================================
+       INPUTS
+       ======================================== */
+    .input {
+      width: 100%;
+      height: 40px;
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: var(--background);
+      border: 1px solid var(--input);
+      border-radius: var(--radius);
+      color: var(--foreground);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .input::placeholder {
+      color: var(--muted-foreground);
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .input-sm {
+      height: 32px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+    }
+
+    .input-lg {
+      height: 48px;
+      padding: 12px 16px;
+      font-size: 1rem;
+    }
+
+    /* Input group */
+    .input-group {
+      display: flex;
+    }
+
+    .input-group .input {
+      border-radius: 0;
+    }
+
+    .input-group .input:first-child {
+      border-radius: var(--radius) 0 0 var(--radius);
+    }
+
+    .input-group .input:last-child,
+    .input-group .btn:last-child {
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .input-group .btn {
+      border-radius: 0;
+    }
+
+    /* ========================================
+       TEXTAREA
+       ======================================== */
+    .textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: var(--background);
+      border: 1px solid var(--input);
+      border-radius: var(--radius);
+      color: var(--foreground);
+      resize: vertical;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .textarea::placeholder {
+      color: var(--muted-foreground);
+    }
+
+    .textarea:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+
+    /* ========================================
+       LABEL
+       ======================================== */
+    .label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--foreground);
+    }
+
+    .label-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .helper-text {
+      font-size: 0.75rem;
+      color: var(--muted-foreground);
+      margin-top: 4px;
+    }
+
+    /* ========================================
+       SELECT
+       ======================================== */
+    .select {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 40px;
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      background: var(--background);
+      border: 1px solid var(--input);
+      border-radius: var(--radius);
+      color: var(--foreground);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .select-trigger:hover {
+      border-color: var(--gray-400);
+    }
+
+    .select-trigger:focus {
+      outline: none;
+      border-color: var(--ring);
+    }
+
+    .select-trigger svg {
+      width: 16px;
+      height: 16px;
+      color: var(--muted-foreground);
+    }
+
+    .select-content {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 4px;
+      background: var(--popover);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.15s ease;
+    }
+
+    .select.open .select-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .select-item {
+      padding: 8px 12px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .select-item:first-child {
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .select-item:last-child {
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+
+    .select-item:hover {
+      background: var(--accent);
+    }
+
+    .select-item.selected {
+      background: var(--accent);
+      font-weight: 500;
+    }
+
+    .select-label {
+      padding: 8px 12px 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+    }
+
+    .select-separator {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    /* ========================================
+       CHECKBOX
+       ======================================== */
+    .checkbox {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--input);
+      border-radius: var(--radius-sm);
+      background: var(--background);
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .checkbox:hover {
+      border-color: var(--gray-400);
+    }
+
+    .checkbox:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .checkbox:checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .checkbox:checked::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 2px;
+      width: 5px;
+      height: 9px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .checkbox:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ========================================
+       RADIO
+       ======================================== */
+    .radio {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--input);
+      border-radius: 50%;
+      background: var(--background);
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .radio:hover {
+      border-color: var(--gray-400);
+    }
+
+    .radio:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .radio:checked {
+      border-color: var(--primary);
+    }
+
+    .radio:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    /* ========================================
+       SWITCH
+       ======================================== */
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: var(--input);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .switch-thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s;
+    }
+
+    .switch.checked {
+      background: var(--primary);
+    }
+
+    .switch.checked .switch-thumb {
+      transform: translateX(20px);
+    }
+
+    .switch:focus-within {
+      outline: 2px solid var(--ring);
+      outline-offset: 2px;
+    }
+
+    /* ========================================
+       SLIDER
+       ======================================== */
+    .slider {
+      position: relative;
+      width: 100%;
+      height: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .slider-track {
+      position: absolute;
+      width: 100%;
+      height: 6px;
+      background: var(--secondary);
+      border-radius: 3px;
+    }
+
+    .slider-range {
+      position: absolute;
+      height: 6px;
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .slider-thumb {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--background);
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      cursor: grab;
+      transition: transform 0.1s;
+    }
+
+    .slider-thumb:hover {
+      transform: scale(1.1);
+    }
+
+    .slider-thumb:active {
+      cursor: grabbing;
+    }
+
+    /* ========================================
+       CARDS
+       ======================================== */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 24px 24px 0;
+    }
+
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--card-foreground);
+    }
+
+    .card-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      margin-top: 4px;
+    }
+
+    .card-content {
+      padding: 24px;
+    }
+
+    .card-footer {
+      padding: 0 24px 24px;
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Card variants */
+    .card-interactive {
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .card-interactive:hover {
+      border-color: var(--gray-300);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-compact .card-header {
+      padding: 16px 16px 0;
+    }
+
+    .card-compact .card-content {
+      padding: 16px;
+    }
+
+    .card-compact .card-footer {
+      padding: 0 16px 16px;
+    }
+
+    /* ========================================
+       BADGES
+       ======================================== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 10px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: 1.5;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+
+    .badge-default {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    .badge-secondary {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    .badge-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--foreground);
+    }
+
+    .badge-destructive {
+      background: var(--destructive);
+      color: white;
+    }
+
+    .badge-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .badge-warning {
+      background: var(--warning);
+      color: var(--gray-900);
+    }
+
+    /* ========================================
+       AVATAR
+       ======================================== */
+    .avatar {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--muted);
+      color: var(--muted-foreground);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .avatar-sm {
+      width: 32px;
+      height: 32px;
+    }
+
+    .avatar-lg {
+      width: 56px;
+      height: 56px;
+    }
+
+    .avatar-square {
+      border-radius: var(--radius);
+    }
+
+    .avatar-group {
+      display: flex;
+    }
+
+    .avatar-group .avatar {
+      border: 2px solid var(--background);
+      margin-left: -8px;
+    }
+
+    .avatar-group .avatar:first-child {
+      margin-left: 0;
+    }
+
+    /* ========================================
+       ALERTS
+       ======================================== */
+    .alert {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+
+    .alert-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .alert-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .alert-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    .alert-default {
+      background: var(--background);
+    }
+
+    .alert-destructive {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    .alert-destructive .alert-description {
+      color: #b91c1c;
+    }
+
+    .alert-success {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #166534;
+    }
+
+    .alert-warning {
+      background: #fffbeb;
+      border-color: #fde68a;
+      color: #92400e;
+    }
+
+    /* ========================================
+       PROGRESS
+       ======================================== */
+    .progress {
+      width: 100%;
+      height: 8px;
+      background: var(--secondary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-sm {
+      height: 4px;
+    }
+
+    .progress-lg {
+      height: 12px;
+    }
+
+    /* ========================================
+       SKELETON
+       ======================================== */
+    .skeleton {
+      background: linear-gradient(90deg, var(--muted) 25%, var(--gray-200) 50%, var(--muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius);
+    }
+
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ========================================
+       SEPARATOR
+       ======================================== */
+    .separator {
+      background: var(--border);
+    }
+
+    .separator-horizontal {
+      height: 1px;
+      width: 100%;
+    }
+
+    .separator-vertical {
+      width: 1px;
+      height: 100%;
+    }
+
+    /* ========================================
+       TABLES
+       ======================================== */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    .table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      background: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .table tbody tr:hover {
+      background: var(--muted);
+    }
+
+    .table-compact th,
+    .table-compact td {
+      padding: 8px 12px;
+    }
+
+    .table tfoot td {
+      font-weight: 500;
+      background: var(--muted);
+    }
+
+    /* ========================================
+       TABS
+       ======================================== */
+    .tabs {
+      width: 100%;
+    }
+
+    .tabs-list {
+      display: inline-flex;
+      background: var(--muted);
+      padding: 4px;
+      border-radius: var(--radius);
+      gap: 4px;
+    }
+
+    .tab-trigger {
+      padding: 8px 16px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tab-trigger:hover {
+      color: var(--foreground);
+    }
+
+    .tab-trigger.active {
+      background: var(--background);
+      color: var(--foreground);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px 0;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* ========================================
+       ACCORDION
+       ======================================== */
+    .accordion {
+      width: 100%;
+    }
+
+    .accordion-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .accordion-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 16px 0;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-align: left;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--foreground);
+    }
+
+    .accordion-trigger:hover {
+      text-decoration: underline;
+    }
+
+    .accordion-trigger svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s;
+    }
+
+    .accordion-item.open .accordion-trigger svg {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.2s ease-out;
+    }
+
+    .accordion-item.open .accordion-content {
+      max-height: 500px;
+    }
+
+    .accordion-body {
+      padding-bottom: 16px;
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+    }
+
+    /* ========================================
+       DIALOGS & MODALS
+       ======================================== */
+    .dialog-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+
+    .dialog-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dialog {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      max-width: 450px;
+      width: 90%;
+      max-height: 85vh;
+      overflow: auto;
+      transform: scale(0.95);
+      transition: transform 0.2s;
+    }
+
+    .dialog-backdrop.open .dialog {
+      transform: scale(1);
+    }
+
+    .dialog-header {
+      padding: 24px 24px 0;
+    }
+
+    .dialog-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    .dialog-description {
+      font-size: 0.875rem;
+      color: var(--muted-foreground);
+      margin-top: 4px;
+    }
+
+    .dialog-content {
+      padding: 24px;
+    }
+
+    .dialog-footer {
+      padding: 0 24px 24px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* ========================================
+       TOOLTIPS
+       ======================================== */
+    .tooltip-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 8px;
+      padding: 6px 12px;
+      background: var(--foreground);
+      color: var(--background);
+      font-size: 0.75rem;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s, visibility 0.15s;
+      z-index: 100;
+    }
+
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--foreground);
+    }
+
+    .tooltip-wrapper:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ========================================
+       POPOVERS
+       ======================================== */
+    .popover-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .popover {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 8px;
+      background: var(--popover);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      min-width: 280px;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.15s ease;
+    }
+
+    .popover-wrapper.open .popover {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .popover-header {
+      padding: 16px 16px 0;
+    }
+
+    .popover-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .popover-description {
+      font-size: 0.75rem;
+      color: var(--muted-foreground);
+      margin-top: 2px;
+    }
+
+    .popover-content {
+      padding: 16px;
+    }
+
+    /* ========================================
+       DROPDOWN MENUS
+       ======================================== */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 4px;
+      min-width: 200px;
+      background: var(--popover);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 4px;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.15s ease;
+    }
+
+    .dropdown.open .dropdown-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-label {
+      padding: 6px 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted-foreground);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      font-size: 0.875rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .dropdown-item:hover {
+      background: var(--accent);
+    }
+
+    .dropdown-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--muted-foreground);
+    }
+
+    .dropdown-item-destructive {
+      color: var(--destructive);
+    }
+
+    .dropdown-item-destructive svg {
+      color: var(--destructive);
+    }
+
+    .dropdown-shortcut {
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: var(--muted-foreground);
+    }
+
+    .dropdown-separator {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 768px) {
+      .component-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #dashboard .dashboard-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      #dashboard > div:nth-child(4) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #dashboard .dashboard-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header style="position: sticky; top: 0; background: var(--background); border-bottom: 1px solid var(--border); z-index: 100;">
+    <div class="container" style="padding: 16px 24px;">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <h1 style="font-size: 1.25rem; font-weight: 600;">Component Library</h1>
+          <span class="badge badge-secondary">v1.0</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button class="btn btn-ghost btn-icon" id="theme-toggle" title="Toggle theme">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- BUTTONS SECTION -->
+    <section class="section" id="buttons">
+      <h2 class="section-title">Buttons</h2>
+      <p class="section-desc">Interactive button components with multiple variants and sizes.</p>
+
+      <div class="component-grid">
+        <div class="component-box">
+          <h3>Variants</h3>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn btn-default">Default</button>
+            <button class="btn btn-secondary">Secondary</button>
+            <button class="btn btn-outline">Outline</button>
+            <button class="btn btn-ghost">Ghost</button>
+            <button class="btn btn-destructive">Destructive</button>
+            <button class="btn btn-link">Link</button>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Sizes</h3>
+          <div class="flex items-center gap-2">
+            <button class="btn btn-default btn-sm">Small</button>
+            <button class="btn btn-default">Default</button>
+            <button class="btn btn-default btn-lg">Large</button>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>With Icons</h3>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn btn-default">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              Add Item
+            </button>
+            <button class="btn btn-outline">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+            <button class="btn btn-ghost btn-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>States</h3>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn btn-default">Normal</button>
+            <button class="btn btn-default" disabled>Disabled</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORM INPUTS SECTION -->
+    <section class="section" id="inputs">
+      <h2 class="section-title">Form Inputs</h2>
+      <p class="section-desc">Text inputs, textareas, and form controls.</p>
+
+      <div class="component-grid">
+        <div class="component-box">
+          <h3>Text Input</h3>
+          <div class="flex flex-col gap-3">
+            <div>
+              <label class="label">Email</label>
+              <input type="email" class="input" placeholder="Enter your email">
+            </div>
+            <div>
+              <label class="label">Password</label>
+              <input type="password" class="input" placeholder="Enter password">
+              <p class="helper-text">Must be at least 8 characters</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Input Sizes</h3>
+          <div class="flex flex-col gap-3">
+            <input type="text" class="input input-sm" placeholder="Small input">
+            <input type="text" class="input" placeholder="Default input">
+            <input type="text" class="input input-lg" placeholder="Large input">
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Input Group</h3>
+          <div class="flex flex-col gap-3">
+            <div class="input-group">
+              <input type="email" class="input" placeholder="Enter your email">
+              <button class="btn btn-default">Subscribe</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Textarea</h3>
+          <div>
+            <label class="label">Message</label>
+            <textarea class="textarea" placeholder="Type your message here..."></textarea>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Disabled</h3>
+          <div class="flex flex-col gap-3">
+            <input type="text" class="input" placeholder="Disabled input" disabled>
+            <textarea class="textarea" placeholder="Disabled textarea" disabled></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELECTS SECTION -->
+    <section class="section" id="selects">
+      <h2 class="section-title">Select</h2>
+      <p class="section-desc">Dropdown select components for choosing options.</p>
+
+      <div class="component-grid">
+        <div class="component-box">
+          <h3>Basic Select</h3>
+          <div class="select" data-value="">
+            <button class="select-trigger">
+              <span>Select an option...</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="select-content">
+              <div class="select-item" data-value="apple">Apple</div>
+              <div class="select-item" data-value="banana">Banana</div>
+              <div class="select-item" data-value="orange">Orange</div>
+              <div class="select-item" data-value="grape">Grape</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Grouped Select</h3>
+          <div class="select" data-value="">
+            <button class="select-trigger">
+              <span>Select a timezone...</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="select-content">
+              <div class="select-label">North America</div>
+              <div class="select-item" data-value="est">Eastern (EST)</div>
+              <div class="select-item" data-value="cst">Central (CST)</div>
+              <div class="select-item" data-value="pst">Pacific (PST)</div>
+              <div class="select-separator"></div>
+              <div class="select-label">Europe</div>
+              <div class="select-item" data-value="gmt">London (GMT)</div>
+              <div class="select-item" data-value="cet">Paris (CET)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHECKBOXES & RADIOS SECTION -->
+    <section class="section" id="checkboxes">
+      <h2 class="section-title">Checkboxes & Radios</h2>
+      <p class="section-desc">Selection controls for forms.</p>
+
+      <div class="component-grid">
+        <div class="component-box">
+          <h3>Checkboxes</h3>
+          <div class="flex flex-col gap-3">
+            <label class="label-inline">
+              <input type="checkbox" class="checkbox">
+              <span>Accept terms and conditions</span>
+            </label>
+            <label class="label-inline">
+              <input type="checkbox" class="checkbox" checked>
+              <span>Send me marketing emails</span>
+            </label>
+            <label class="label-inline">
+              <input type="checkbox" class="checkbox" disabled>
+              <span>Disabled option</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Radio Buttons</h3>
+          <div class="flex flex-col gap-3">
+            <label class="label-inline">
+              <input type="radio" name="plan" class="radio" checked>
+              <span>Free plan</span>
+            </label>
+            <label class="label-inline">
+              <input type="radio" name="plan" class="radio">
+              <span>Pro plan ($9/mo)</span>
+            </label>
+            <label class="label-inline">
+              <input type="radio" name="plan" class="radio">
+              <span>Enterprise plan</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Switch Toggle</h3>
+          <div class="flex flex-col gap-3">
+            <label class="label-inline">
+              <div class="switch" onclick="this.classList.toggle('checked')">
+                <input type="checkbox">
+                <div class="switch-thumb"></div>
+              </div>
+              <span>Enable notifications</span>
+            </label>
+            <label class="label-inline">
+              <div class="switch checked" onclick="this.classList.toggle('checked')">
+                <input type="checkbox" checked>
+                <div class="switch-thumb"></div>
+              </div>
+              <span>Dark mode</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Slider</h3>
+          <div class="flex flex-col gap-4">
+            <div>
+              <label class="label">Volume: <span id="slider-value">50</span>%</label>
+              <div class="slider" id="demo-slider">
+                <div class="slider-track"></div>
+                <div class="slider-range" style="width: 50%;"></div>
+                <div class="slider-thumb" style="left: calc(50% - 10px);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDS SECTION -->
+    <section class="section" id="cards">
+      <h2 class="section-title">Cards</h2>
+      <p class="section-desc">Containers for grouping related content.</p>
+
+      <div class="component-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Card Title</div>
+            <div class="card-description">This is a description of the card content.</div>
+          </div>
+          <div class="card-content">
+            <p>Card content goes here. You can put any content inside a card.</p>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-default">Save</button>
+          </div>
+        </div>
+
+        <div class="card card-interactive">
+          <div class="card-header">
+            <div class="card-title">Interactive Card</div>
+            <div class="card-description">Hover to see the effect</div>
+          </div>
+          <div class="card-content">
+            <p>This card has hover states and can be clicked.</p>
+          </div>
+        </div>
+
+        <div class="card card-compact">
+          <div class="card-header">
+            <div class="card-title">Compact Card</div>
+          </div>
+          <div class="card-content">
+            <p>Less padding for dense layouts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BADGES SECTION -->
+    <section class="section" id="badges">
+      <h2 class="section-title">Badges</h2>
+      <p class="section-desc">Small status indicators and labels.</p>
+
+      <div class="component-grid">
+        <div class="component-box">
+          <h3>Variants</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge badge-default">Default</span>
+            <span class="badge badge-secondary">Secondary</span>
+            <span class="badge badge-outline">Outline</span>
+            <span class="badge badge-destructive">Destructive</span>
+            <span class="badge badge-success">Success</span>
+            <span class="badge badge-warning">Warning</span>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>With Icons</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge badge-success">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Completed
+            </span>
+            <span class="badge badge-warning">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Pending
+            </span>
+            <span class="badge badge-destructive">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              Failed
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AVATARS SECTION -->
+    <section class="section" id="avatars">
+      <h2 class="section-title">Avatars</h2>
+      <p class="section-desc">User profile images with fallback support.</p>
+
+      <div class="component-grid">
+        <div class="component-box">
+          <h3>Sizes</h3>
+          <div class="flex items-center gap-3">
+            <div class="avatar avatar-sm">
+              <div class="avatar-fallback">SM</div>
+            </div>
+            <div class="avatar">
+              <div class="avatar-fallback">MD</div>
+            </div>
+            <div class="avatar avatar-lg">
+              <div class="avatar-fallback">LG</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Variants</h3>
+          <div class="flex items-center gap-3">
+            <div class="avatar">
+              <div class="avatar-fallback">JD</div>
+            </div>
+            <div class="avatar avatar-square">
+              <div class="avatar-fallback">SQ</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Avatar Group</h3>
+          <div class="avatar-group">
+            <div class="avatar">
+              <div class="avatar-fallback">A</div>
+            </div>
+            <div class="avatar">
+              <div class="avatar-fallback">B</div>
+            </div>
+            <div class="avatar">
+              <div class="avatar-fallback">C</div>
+            </div>
+            <div class="avatar">
+              <div class="avatar-fallback">+3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERTS SECTION -->
+    <section class="section" id="alerts">
+      <h2 class="section-title">Alerts</h2>
+      <p class="section-desc">Callouts for important information.</p>
+
+      <div class="flex flex-col gap-4" style="max-width: 600px;">
+        <div class="alert alert-default">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div class="alert-content">
+            <div class="alert-title">Information</div>
+            <div class="alert-description">This is an informational alert message.</div>
+          </div>
+        </div>
+
+        <div class="alert alert-success">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div class="alert-content">
+            <div class="alert-title">Success</div>
+            <div class="alert-description">Your changes have been saved successfully.</div>
+          </div>
+        </div>
+
+        <div class="alert alert-warning">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="alert-content">
+            <div class="alert-title">Warning</div>
+            <div class="alert-description">Please review your input before proceeding.</div>
+          </div>
+        </div>
+
+        <div class="alert alert-destructive">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <div class="alert-content">
+            <div class="alert-title">Error</div>
+            <div class="alert-description">Unable to process your request. Please try again.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRESS SECTION -->
+    <section class="section" id="progress">
+      <h2 class="section-title">Progress</h2>
+      <p class="section-desc">Progress indicators and loading states.</p>
+
+      <div class="component-grid">
+        <div class="component-box">
+          <h3>Progress Bars</h3>
+          <div class="flex flex-col gap-4">
+            <div>
+              <div class="flex justify-between text-sm" style="margin-bottom: 4px;">
+                <span>Storage</span>
+                <span>25%</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar" style="width: 25%;"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm" style="margin-bottom: 4px;">
+                <span>Upload</span>
+                <span>60%</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar" style="width: 60%;"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm" style="margin-bottom: 4px;">
+                <span>Complete</span>
+                <span>100%</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Sizes</h3>
+          <div class="flex flex-col gap-4">
+            <div class="progress progress-sm">
+              <div class="progress-bar" style="width: 40%;"></div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" style="width: 60%;"></div>
+            </div>
+            <div class="progress progress-lg">
+              <div class="progress-bar" style="width: 80%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Skeleton Loaders</h3>
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-3">
+              <div class="skeleton" style="width: 48px; height: 48px; border-radius: 50%;"></div>
+              <div class="flex flex-col gap-2" style="flex: 1;">
+                <div class="skeleton" style="height: 16px; width: 60%;"></div>
+                <div class="skeleton" style="height: 12px; width: 40%;"></div>
+              </div>
+            </div>
+            <div class="skeleton" style="height: 120px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABLES SECTION -->
+    <section class="section" id="tables">
+      <h2 class="section-title">Tables</h2>
+      <p class="section-desc">Data tables with sorting and filtering.</p>
+
+      <div class="table-container" style="max-width: 800px;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">
+                <input type="checkbox" class="checkbox">
+              </th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th style="text-align: right;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" class="checkbox"></td>
+              <td class="font-medium">John Doe</td>
+              <td>john@example.com</td>
+              <td><span class="badge badge-success">Active</span></td>
+              <td style="text-align: right;">$250.00</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="checkbox"></td>
+              <td class="font-medium">Jane Smith</td>
+              <td>jane@example.com</td>
+              <td><span class="badge badge-warning">Pending</span></td>
+              <td style="text-align: right;">$150.00</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="checkbox"></td>
+              <td class="font-medium">Bob Wilson</td>
+              <td>bob@example.com</td>
+              <td><span class="badge badge-secondary">Inactive</span></td>
+              <td style="text-align: right;">$350.00</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="checkbox"></td>
+              <td class="font-medium">Alice Brown</td>
+              <td>alice@example.com</td>
+              <td><span class="badge badge-success">Active</span></td>
+              <td style="text-align: right;">$450.00</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4">Total</td>
+              <td style="text-align: right;">$1,200.00</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- TABS SECTION -->
+    <section class="section" id="tabs">
+      <h2 class="section-title">Tabs</h2>
+      <p class="section-desc">Tabbed navigation for organizing content.</p>
+
+      <div style="max-width: 500px;">
+        <div class="tabs">
+          <div class="tabs-list">
+            <button class="tab-trigger active" data-tab="account">Account</button>
+            <button class="tab-trigger" data-tab="password">Password</button>
+            <button class="tab-trigger" data-tab="notifications">Notifications</button>
+          </div>
+          <div class="tab-content active" data-tab-content="account">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Account Settings</div>
+                <div class="card-description">Manage your account details here.</div>
+              </div>
+              <div class="card-content">
+                <div class="flex flex-col gap-3">
+                  <div>
+                    <label class="label">Name</label>
+                    <input type="text" class="input" value="John Doe">
+                  </div>
+                  <div>
+                    <label class="label">Username</label>
+                    <input type="text" class="input" value="@johndoe">
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <button class="btn btn-default">Save Changes</button>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content" data-tab-content="password">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Change Password</div>
+                <div class="card-description">Update your password here.</div>
+              </div>
+              <div class="card-content">
+                <div class="flex flex-col gap-3">
+                  <div>
+                    <label class="label">Current Password</label>
+                    <input type="password" class="input">
+                  </div>
+                  <div>
+                    <label class="label">New Password</label>
+                    <input type="password" class="input">
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <button class="btn btn-default">Update Password</button>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content" data-tab-content="notifications">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Notification Preferences</div>
+              </div>
+              <div class="card-content">
+                <div class="flex flex-col gap-3">
+                  <label class="label-inline">
+                    <div class="switch checked" onclick="this.classList.toggle('checked')">
+                      <input type="checkbox" checked>
+                      <div class="switch-thumb"></div>
+                    </div>
+                    <span>Email notifications</span>
+                  </label>
+                  <label class="label-inline">
+                    <div class="switch" onclick="this.classList.toggle('checked')">
+                      <input type="checkbox">
+                      <div class="switch-thumb"></div>
+                    </div>
+                    <span>Push notifications</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCORDION SECTION -->
+    <section class="section" id="accordion">
+      <h2 class="section-title">Accordion</h2>
+      <p class="section-desc">Collapsible content sections.</p>
+
+      <div class="accordion" style="max-width: 600px;">
+        <div class="accordion-item open">
+          <button class="accordion-trigger">
+            <span>Is it accessible?</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              Yes. It adheres to the WAI-ARIA design pattern for accordions.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span>Is it styled?</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              Yes. It comes with default styles that match the other components' aesthetic.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            <span>Is it animated?</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              Yes. It's animated by default with smooth transitions.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIALOGS & MODALS SECTION -->
+    <section class="section" id="dialogs">
+      <h2 class="section-title">Dialogs & Modals</h2>
+      <p class="section-desc">Overlay dialogs for focused interactions.</p>
+
+      <div class="flex gap-3">
+        <button class="btn btn-outline" onclick="openDialog('demo-dialog')">Open Dialog</button>
+        <button class="btn btn-destructive" onclick="openDialog('confirm-dialog')">Delete Item</button>
+      </div>
+
+      <!-- Dialog backdrop and content -->
+      <div class="dialog-backdrop" id="demo-dialog" onclick="closeDialog('demo-dialog')">
+        <div class="dialog" onclick="event.stopPropagation()">
+          <div class="dialog-header">
+            <div class="dialog-title">Edit Profile</div>
+            <div class="dialog-description">Make changes to your profile here.</div>
+          </div>
+          <div class="dialog-content">
+            <div class="flex flex-col gap-3">
+              <div>
+                <label class="label">Name</label>
+                <input type="text" class="input" value="John Doe">
+              </div>
+              <div>
+                <label class="label">Email</label>
+                <input type="email" class="input" value="john@example.com">
+              </div>
+            </div>
+          </div>
+          <div class="dialog-footer">
+            <button class="btn btn-outline" onclick="closeDialog('demo-dialog')">Cancel</button>
+            <button class="btn btn-default" onclick="closeDialog('demo-dialog')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Confirm dialog -->
+      <div class="dialog-backdrop" id="confirm-dialog" onclick="closeDialog('confirm-dialog')">
+        <div class="dialog" onclick="event.stopPropagation()">
+          <div class="dialog-header">
+            <div class="dialog-title">Are you sure?</div>
+            <div class="dialog-description">This action cannot be undone. This will permanently delete your item.</div>
+          </div>
+          <div class="dialog-footer">
+            <button class="btn btn-outline" onclick="closeDialog('confirm-dialog')">Cancel</button>
+            <button class="btn btn-destructive" onclick="closeDialog('confirm-dialog')">Delete</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOLTIPS & POPOVERS SECTION -->
+    <section class="section" id="tooltips">
+      <h2 class="section-title">Tooltips & Popovers</h2>
+      <p class="section-desc">Contextual overlays for additional information.</p>
+
+      <div class="component-grid">
+        <div class="component-box">
+          <h3>Tooltips</h3>
+          <div class="flex gap-3">
+            <div class="tooltip-wrapper">
+              <button class="btn btn-outline">Hover me</button>
+              <div class="tooltip">This is a tooltip</div>
+            </div>
+            <div class="tooltip-wrapper">
+              <button class="btn btn-ghost btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </button>
+              <div class="tooltip">Help information</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-box">
+          <h3>Popover</h3>
+          <div class="popover-wrapper">
+            <button class="btn btn-outline" onclick="this.parentElement.classList.toggle('open')">
+              Open Popover
+            </button>
+            <div class="popover">
+              <div class="popover-header">
+                <div class="popover-title">Dimensions</div>
+                <div class="popover-description">Set the dimensions for the layer.</div>
+              </div>
+              <div class="popover-content">
+                <div class="flex gap-3">
+                  <div style="flex: 1;">
+                    <label class="label">Width</label>
+                    <input type="text" class="input input-sm" value="100%">
+                  </div>
+                  <div style="flex: 1;">
+                    <label class="label">Height</label>
+                    <input type="text" class="input input-sm" value="25px">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DROPDOWN MENUS SECTION -->
+    <section class="section" id="dropdowns">
+      <h2 class="section-title">Dropdown Menus</h2>
+      <p class="section-desc">Contextual menus for actions.</p>
+
+      <div class="flex gap-3">
+        <div class="dropdown">
+          <button class="btn btn-outline" onclick="toggleDropdown(this)">
+            Open Menu
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-content">
+            <div class="dropdown-label">My Account</div>
+            <div class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Profile
+              <span class="dropdown-shortcut">⌘P</span>
+            </div>
+            <div class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+              Settings
+              <span class="dropdown-shortcut">⌘S</span>
+            </div>
+            <div class="dropdown-separator"></div>
+            <div class="dropdown-item dropdown-item-destructive">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log out
+              <span class="dropdown-shortcut">⌘Q</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- NOTE: Complete dashboard example is in dashboard-example.html -->
+
+  <script>
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    // Select dropdowns
+    document.querySelectorAll('.select').forEach(select => {
+      const trigger = select.querySelector('.select-trigger');
+      const content = select.querySelector('.select-content');
+      const items = select.querySelectorAll('.select-item');
+
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.select.open').forEach(s => {
+          if (s !== select) s.classList.remove('open');
+        });
+        select.classList.toggle('open');
+      });
+
+      items.forEach(item => {
+        item.addEventListener('click', () => {
+          const value = item.dataset.value;
+          const text = item.textContent;
+          trigger.querySelector('span').textContent = text;
+          items.forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          select.dataset.value = value;
+          select.classList.remove('open');
+        });
+      });
+    });
+
+    // Close selects when clicking outside
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.select.open').forEach(s => s.classList.remove('open'));
+    });
+
+    // Slider functionality
+    const slider = document.getElementById('demo-slider');
+    if (slider) {
+      const thumb = slider.querySelector('.slider-thumb');
+      const range = slider.querySelector('.slider-range');
+      const valueDisplay = document.getElementById('slider-value');
+      let isDragging = false;
+
+      const updateSlider = (e) => {
+        const rect = slider.getBoundingClientRect();
+        let percent = ((e.clientX - rect.left) / rect.width) * 100;
+        percent = Math.max(0, Math.min(100, percent));
+        thumb.style.left = `calc(${percent}% - 10px)`;
+        range.style.width = `${percent}%`;
+        valueDisplay.textContent = Math.round(percent);
+      };
+
+      thumb.addEventListener('mousedown', () => isDragging = true);
+      document.addEventListener('mousemove', (e) => {
+        if (isDragging) updateSlider(e);
+      });
+      document.addEventListener('mouseup', () => isDragging = false);
+      slider.addEventListener('click', updateSlider);
+    }
+
+    // Tabs functionality
+    document.querySelectorAll('.tabs').forEach(tabs => {
+      const triggers = tabs.querySelectorAll('.tab-trigger');
+      const contents = tabs.querySelectorAll('.tab-content');
+
+      triggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const tabId = trigger.dataset.tab;
+
+          triggers.forEach(t => t.classList.remove('active'));
+          contents.forEach(c => c.classList.remove('active'));
+
+          trigger.classList.add('active');
+          tabs.querySelector(`[data-tab-content="${tabId}"]`).classList.add('active');
+        });
+      });
+    });
+
+    // Accordion functionality
+    document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const item = trigger.parentElement;
+        const accordion = item.parentElement;
+        const isOpen = item.classList.contains('open');
+
+        accordion.querySelectorAll('.accordion-item').forEach(i => {
+          i.classList.remove('open');
+        });
+
+        if (!isOpen) {
+          item.classList.add('open');
+        }
+      });
+    });
+
+    // Dialog functions
+    function openDialog(id) {
+      document.getElementById(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDialog(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close dialog on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.dialog-backdrop.open').forEach(d => {
+          d.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      }
+    });
+
+    // Dropdown functionality
+    function toggleDropdown(button) {
+      const dropdown = button.parentElement;
+      const isOpen = dropdown.classList.contains('open');
+
+      document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+
+      if (!isOpen) {
+        dropdown.classList.add('open');
+      }
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+      }
+    });
+
+    // Close popovers when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.popover-wrapper')) {
+        document.querySelectorAll('.popover-wrapper.open').forEach(p => p.classList.remove('open'));
+      }
+    });
+
+    // Animate progress bars on scroll
+    const animateOnScroll = () => {
+      const progressBars = document.querySelectorAll('.progress-bar');
+      progressBars.forEach(bar => {
+        const rect = bar.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          bar.style.transition = 'width 0.6s ease-out';
+        }
+      });
+    };
+
+    window.addEventListener('scroll', animateOnScroll);
+    animateOnScroll();
+  </script>
+</body>
+</html>

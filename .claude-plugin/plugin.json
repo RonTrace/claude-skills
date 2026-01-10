@@ -1,0 +1,9 @@
+{
+  "name": "trace-tools",
+  "description": "Trace team skills for data analysis, UI design, and development workflows",
+  "version": "1.0.0",
+  "author": {
+    "name": "Trace Team"
+  },
+  "keywords": ["trace", "data-analysis", "mysql", "redshift", "ui", "dashboards"]
+}

@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{BRAND}} Design System - Component Library</title>
+  <!-- TODO: Add Google Fonts link if needed -->
+  <style>
+    /* ============================================================
+       SECTION 1: CSS VARIABLES (TOKENS)
+       Assigned to: Main Agent (before subagents)
+       ============================================================ */
+    :root {
+      /* ---- Brand Colors ---- */
+      --primary: /* TODO: Extract primary brand color (hex) */;
+      --primary-hover: /* TODO: Extract primary hover color */;
+      --primary-light: /* TODO: Extract light tint of primary */;
+
+      /* ---- Button Colors (may differ from primary) ---- */
+      --btn-primary: /* TODO: Extract button background color */;
+      --btn-primary-hover: /* TODO: Extract button hover color */;
+      --btn-primary-text: /* TODO: Extract button text color */;
+
+      /* ---- Gray Palette ---- */
+      --gray-50: /* TODO: Extract lightest gray */;
+      --gray-100: /* TODO: Extract */;
+      --gray-200: /* TODO: Extract */;
+      --gray-300: /* TODO: Extract */;
+      --gray-400: /* TODO: Extract */;
+      --gray-500: /* TODO: Extract */;
+      --gray-600: /* TODO: Extract */;
+      --gray-700: /* TODO: Extract */;
+      --gray-800: /* TODO: Extract */;
+      --gray-900: /* TODO: Extract darkest gray */;
+
+      /* ---- Semantic Colors ---- */
+      --background: /* TODO: Extract page background */;
+      --foreground: /* TODO: Extract main text color */;
+      --card: /* TODO: Extract card background */;
+      --card-foreground: /* TODO: Extract card text color */;
+      --border: /* TODO: Extract default border color */;
+      --input: /* TODO: Extract input border color */;
+      --muted: /* TODO: Extract muted background */;
+      --muted-foreground: /* TODO: Extract muted text color */;
+
+      /* ---- Status Colors ---- */
+      --success: /* TODO: Extract success color */;
+      --success-light: /* TODO: Extract success background */;
+      --error: /* TODO: Extract error/destructive color */;
+      --error-light: /* TODO: Extract error background */;
+      --warning: /* TODO: Extract warning color */;
+      --warning-light: /* TODO: Extract warning background */;
+
+      /* ---- Typography ---- */
+      --font-family: /* TODO: Extract font stack */;
+      --font-size-xs: /* TODO: Extract (e.g., 0.75rem) */;
+      --font-size-sm: /* TODO: Extract (e.g., 0.875rem) */;
+      --font-size-base: /* TODO: Extract (e.g., 1rem) */;
+      --font-size-lg: /* TODO: Extract (e.g., 1.125rem) */;
+      --font-size-xl: /* TODO: Extract (e.g., 1.25rem) */;
+      --font-size-2xl: /* TODO: Extract (e.g., 1.5rem) */;
+      --font-size-3xl: /* TODO: Extract (e.g., 2rem) */;
+
+      /* ---- Spacing ---- */
+      --space-xs: /* TODO: Extract (e.g., 4px) */;
+      --space-sm: /* TODO: Extract (e.g., 8px) */;
+      --space-md: /* TODO: Extract (e.g., 16px) */;
+      --space-lg: /* TODO: Extract (e.g., 24px) */;
+      --space-xl: /* TODO: Extract (e.g., 32px) */;
+      --space-2xl: /* TODO: Extract (e.g., 48px) */;
+
+      /* ---- Border Radius ---- */
+      --radius-sm: /* TODO: Extract small radius */;
+      --radius-md: /* TODO: Extract medium radius */;
+      --radius-lg: /* TODO: Extract large radius */;
+      --radius-xl: /* TODO: Extract extra large radius */;
+      --radius-pill: 9999px;
+
+      /* ---- Shadows ---- */
+      --shadow-sm: /* TODO: Extract small shadow */;
+      --shadow-md: /* TODO: Extract medium shadow */;
+      --shadow-lg: /* TODO: Extract large shadow */;
+    }
+
+    /* ============================================================
+       BASE STYLES (Do not modify - standard reset)
+       ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family), -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Demo Layout Styles */
+    .container { max-width: 1200px; margin: 0 auto; padding: 48px 24px; }
+    .page-title { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+    .page-subtitle { color: var(--muted-foreground); margin-bottom: 48px; }
+    .section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; margin-bottom: 32px; }
+    .section-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .subsection { margin-bottom: 32px; }
+    .subsection:last-child { margin-bottom: 0; }
+    .subsection-title { font-size: 0.875rem; font-weight: 600; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+    .component-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-bottom: 16px; }
+    .component-row:last-child { margin-bottom: 0; }
+    .demo-grid { display: grid; gap: 16px; }
+    .demo-grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .demo-grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .demo-grid-4 { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 768px) { .demo-grid-2, .demo-grid-3, .demo-grid-4 { grid-template-columns: 1fr; } }
+
+    /* ============================================================
+       SECTION 2: BUTTONS
+       Assigned to: Subagent 1
+       Lines: ~130-280
+       ============================================================ */
+
+    /* ---- Base Button ---- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-weight: /* TODO: Extract button font-weight */;
+      font-size: /* TODO: Extract button font-size */;
+      line-height: 1;
+      padding: /* TODO: Extract button padding (e.g., 10px 20px) */;
+      border: /* TODO: Extract button border (e.g., none or 1px solid) */;
+      border-radius: /* TODO: Extract button border-radius */;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .btn:focus-visible {
+      outline: /* TODO: Extract focus outline style */;
+      outline-offset: 2px;
+    }
+    .btn:disabled {
+      opacity: /* TODO: Extract disabled opacity */;
+      cursor: not-allowed;
+    }
+    .btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ---- Primary Button ---- */
+    .btn-primary {
+      background: /* TODO: Extract primary button background */;
+      color: /* TODO: Extract primary button text color */;
+      border-color: /* TODO: Extract primary button border color */;
+    }
+    .btn-primary:hover {
+      background: /* TODO: Extract primary button hover background */;
+    }
+    .btn-primary:active {
+      background: /* TODO: Extract primary button active/pressed background */;
+    }
+    .btn-primary:disabled {
+      background: /* TODO: Extract primary button disabled background */;
+    }
+
+    /* ---- Secondary Button ---- */
+    .btn-secondary {
+      background: /* TODO: Extract secondary button background */;
+      color: /* TODO: Extract secondary button text color */;
+      border-color: /* TODO: Extract secondary button border color */;
+    }
+    .btn-secondary:hover {
+      background: /* TODO: Extract secondary button hover background */;
+    }
+    .btn-secondary:active {
+      background: /* TODO: Extract secondary button active background */;
+    }
+
+    /* ---- Outline Button ---- */
+    .btn-outline {
+      background: /* TODO: Extract outline button background (usually transparent) */;
+      color: /* TODO: Extract outline button text color */;
+      border: /* TODO: Extract outline button border */;
+    }
+    .btn-outline:hover {
+      background: /* TODO: Extract outline button hover background */;
+      border-color: /* TODO: Extract outline button hover border */;
+    }
+
+    /* ---- Ghost Button ---- */
+    .btn-ghost {
+      background: /* TODO: Extract ghost button background (usually transparent) */;
+      color: /* TODO: Extract ghost button text color */;
+      border: none;
+    }
+    .btn-ghost:hover {
+      background: /* TODO: Extract ghost button hover background */;
+    }
+
+    /* ---- Destructive Button ---- */
+    .btn-destructive {
+      background: /* TODO: Extract destructive button background */;
+      color: /* TODO: Extract destructive button text color */;
+    }
+    .btn-destructive:hover {
+      background: /* TODO: Extract destructive button hover background */;
+    }
+
+    /* ---- Link Button ---- */
+    .btn-link {
+      background: transparent;
+      color: /* TODO: Extract link button color */;
+      text-decoration: /* TODO: Extract (underline or none) */;
+      padding: 0;
+      border: none;
+    }
+    .btn-link:hover {
+      text-decoration: /* TODO: Extract link hover decoration */;
+      color: /* TODO: Extract link hover color */;
+    }
+
+    /* ---- Button Sizes ---- */
+    .btn-sm {
+      padding: /* TODO: Extract small button padding */;
+      font-size: /* TODO: Extract small button font-size */;
+    }
+    .btn-lg {
+      padding: /* TODO: Extract large button padding */;
+      font-size: /* TODO: Extract large button font-size */;
+    }
+
+    /* ---- Icon Button ---- */
+    .btn-icon {
+      padding: /* TODO: Extract icon button padding (equal all sides) */;
+      width: /* TODO: Extract icon button width */;
+      height: /* TODO: Extract icon button height */;
+    }
+    .btn-icon-sm {
+      padding: /* TODO: Extract small icon button padding */;
+      width: /* TODO: Extract */;
+      height: /* TODO: Extract */;
+    }
+
+    /* ============================================================
+       SECTION 3: FORM INPUTS
+       Assigned to: Subagent 2
+       Lines: ~285-450
+       ============================================================ */
+
+    /* ---- Form Group ---- */
+    .form-group {
+      margin-bottom: /* TODO: Extract form group margin */;
+    }
+
+    /* ---- Label ---- */
+    .label {
+      display: block;
+      font-size: /* TODO: Extract label font-size */;
+      font-weight: /* TODO: Extract label font-weight */;
+      color: /* TODO: Extract label color */;
+      margin-bottom: /* TODO: Extract label margin-bottom */;
+    }
+    .label-required::after {
+      content: ' *';
+      color: var(--error);
+    }
+
+    /* ---- Text Input ---- */
+    .input {
+      width: 100%;
+      height: /* TODO: Extract input height */;
+      padding: /* TODO: Extract input padding */;
+      font-family: inherit;
+      font-size: /* TODO: Extract input font-size */;
+      color: /* TODO: Extract input text color */;
+      background: /* TODO: Extract input background */;
+      border: /* TODO: Extract input border */;
+      border-radius: /* TODO: Extract input border-radius */;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .input::placeholder {
+      color: /* TODO: Extract placeholder color */;
+    }
+    .input:hover {
+      border-color: /* TODO: Extract input hover border color */;
+    }
+    .input:focus {
+      outline: none;
+      border-color: /* TODO: Extract input focus border color */;
+      box-shadow: /* TODO: Extract input focus ring/shadow */;
+    }
+    .input:disabled {
+      background: /* TODO: Extract disabled input background */;
+      color: /* TODO: Extract disabled input color */;
+      cursor: not-allowed;
+    }
+    .input-error {
+      border-color: /* TODO: Extract error border color */;
+    }
+    .input-error:focus {
+      box-shadow: /* TODO: Extract error focus ring */;
+    }
+
+    /* ---- Input Sizes ---- */
+    .input-sm {
+      height: /* TODO: Extract small input height */;
+      padding: /* TODO: Extract small input padding */;
+      font-size: /* TODO: Extract small input font-size */;
+    }
+    .input-lg {
+      height: /* TODO: Extract large input height */;
+      padding: /* TODO: Extract large input padding */;
+      font-size: /* TODO: Extract large input font-size */;
+    }
+
+    /* ---- Helper Text ---- */
+    .helper-text {
+      font-size: /* TODO: Extract helper text font-size */;
+      color: /* TODO: Extract helper text color */;
+      margin-top: /* TODO: Extract helper text margin-top */;
+    }
+    .helper-text-error {
+      color: var(--error);
+    }
+
+    /* ---- Textarea ---- */
+    .textarea {
+      width: 100%;
+      min-height: /* TODO: Extract textarea min-height */;
+      padding: /* TODO: Extract textarea padding */;
+      font-family: inherit;
+      font-size: /* TODO: Extract textarea font-size */;
+      color: /* TODO: Extract textarea text color */;
+      background: /* TODO: Extract textarea background */;
+      border: /* TODO: Extract textarea border */;
+      border-radius: /* TODO: Extract textarea border-radius */;
+      resize: vertical;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .textarea:focus {
+      outline: none;
+      border-color: /* TODO: Extract textarea focus border color */;
+      box-shadow: /* TODO: Extract textarea focus shadow */;
+    }
+
+    /* ---- Select ---- */
+    .select {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    .select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: /* TODO: Extract select height */;
+      padding: /* TODO: Extract select padding */;
+      font-family: inherit;
+      font-size: /* TODO: Extract select font-size */;
+      color: /* TODO: Extract select text color */;
+      background: /* TODO: Extract select background */;
+      border: /* TODO: Extract select border */;
+      border-radius: /* TODO: Extract select border-radius */;
+      cursor: pointer;
+    }
+    .select-trigger:hover {
+      border-color: /* TODO: Extract select hover border color */;
+    }
+    .select-trigger svg {
+      width: 16px;
+      height: 16px;
+      color: var(--muted-foreground);
+    }
+    .select-content {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 4px;
+      background: /* TODO: Extract dropdown background */;
+      border: /* TODO: Extract dropdown border */;
+      border-radius: /* TODO: Extract dropdown border-radius */;
+      box-shadow: /* TODO: Extract dropdown shadow */;
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.15s ease;
+    }
+    .select.open .select-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .select-item {
+      padding: /* TODO: Extract dropdown item padding */;
+      font-size: /* TODO: Extract dropdown item font-size */;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .select-item:hover {
+      background: /* TODO: Extract dropdown item hover background */;
+    }
+    .select-item.selected {
+      background: /* TODO: Extract selected item background */;
+      font-weight: /* TODO: Extract selected item font-weight */;
+    }
+
+    /* ============================================================
+       SECTION 4: CHECKBOXES, RADIOS, TOGGLES
+       Assigned to: Subagent 2 (continued)
+       Lines: ~455-580
+       ============================================================ */
+
+    /* ---- Checkbox ---- */
+    .checkbox {
+      appearance: none;
+      width: /* TODO: Extract checkbox width */;
+      height: /* TODO: Extract checkbox height */;
+      border: /* TODO: Extract checkbox border */;
+      border-radius: /* TODO: Extract checkbox border-radius */;
+      background: /* TODO: Extract checkbox background */;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .checkbox:hover {
+      border-color: /* TODO: Extract checkbox hover border */;
+    }
+    .checkbox:focus {
+      outline: none;
+      box-shadow: /* TODO: Extract checkbox focus ring */;
+    }
+    .checkbox:checked {
+      background: /* TODO: Extract checked checkbox background */;
+      border-color: /* TODO: Extract checked checkbox border */;
+    }
+    .checkbox:checked::after {
+      content: '';
+      position: absolute;
+      /* TODO: Extract checkmark positioning and style */
+      left: 5px;
+      top: 2px;
+      width: 5px;
+      height: 9px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    .checkbox:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ---- Radio Button ---- */
+    .radio {
+      appearance: none;
+      width: /* TODO: Extract radio width */;
+      height: /* TODO: Extract radio height */;
+      border: /* TODO: Extract radio border */;
+      border-radius: 50%;
+      background: /* TODO: Extract radio background */;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .radio:hover {
+      border-color: /* TODO: Extract radio hover border */;
+    }
+    .radio:focus {
+      outline: none;
+      box-shadow: /* TODO: Extract radio focus ring */;
+    }
+    .radio:checked {
+      border-color: /* TODO: Extract checked radio border */;
+    }
+    .radio:checked::after {
+      content: '';
+      position: absolute;
+      /* TODO: Extract radio dot positioning */
+      left: 4px;
+      top: 4px;
+      width: 8px;
+      height: 8px;
+      background: /* TODO: Extract radio dot color */;
+      border-radius: 50%;
+    }
+
+    /* ---- Toggle Switch ---- */
+    .toggle {
+      position: relative;
+      width: /* TODO: Extract toggle width */;
+      height: /* TODO: Extract toggle height */;
+      background: /* TODO: Extract toggle off background */;
+      border-radius: /* TODO: Extract toggle border-radius */;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: none;
+      flex-shrink: 0;
+    }
+    .toggle-thumb {
+      position: absolute;
+      top: /* TODO: Extract thumb top offset */;
+      left: /* TODO: Extract thumb left offset */;
+      width: /* TODO: Extract thumb width */;
+      height: /* TODO: Extract thumb height */;
+      background: /* TODO: Extract thumb background */;
+      border-radius: 50%;
+      box-shadow: /* TODO: Extract thumb shadow */;
+      transition: transform 0.2s;
+    }
+    .toggle.checked {
+      background: /* TODO: Extract toggle on background */;
+    }
+    .toggle.checked .toggle-thumb {
+      transform: translateX(/* TODO: Extract thumb travel distance */);
+    }
+
+    /* ---- Inline Label ---- */
+    .label-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: /* TODO: Extract gap between checkbox/radio and label */;
+      cursor: pointer;
+    }
+
+    /* ============================================================
+       SECTION 5: CARDS
+       Assigned to: Subagent 3
+       Lines: ~585-720
+       ============================================================ */
+
+    /* ---- Base Card ---- */
+    .card {
+      background: /* TODO: Extract card background */;
+      border: /* TODO: Extract card border */;
+      border-radius: /* TODO: Extract card border-radius */;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: /* TODO: Extract card header padding */;
+    }
+    .card-title {
+      font-size: /* TODO: Extract card title font-size */;
+      font-weight: /* TODO: Extract card title font-weight */;
+      color: /* TODO: Extract card title color */;
+    }
+    .card-description {
+      font-size: /* TODO: Extract card description font-size */;
+      color: /* TODO: Extract card description color */;
+      margin-top: /* TODO: Extract card description margin-top */;
+    }
+    .card-content {
+      padding: /* TODO: Extract card content padding */;
+    }
+    .card-footer {
+      padding: /* TODO: Extract card footer padding */;
+      display: flex;
+      gap: /* TODO: Extract card footer gap */;
+      border-top: /* TODO: Extract card footer border-top (if any) */;
+    }
+
+    /* ---- Interactive Card ---- */
+    .card-interactive {
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .card-interactive:hover {
+      border-color: /* TODO: Extract interactive card hover border */;
+      box-shadow: /* TODO: Extract interactive card hover shadow */;
+    }
+
+    /* ---- Compact Card ---- */
+    .card-compact .card-header {
+      padding: /* TODO: Extract compact card header padding */;
+    }
+    .card-compact .card-content {
+      padding: /* TODO: Extract compact card content padding */;
+    }
+
+    /* ---- Stat Card ---- */
+    .stat-card {
+      padding: /* TODO: Extract stat card padding */;
+    }
+    .stat-label {
+      font-size: /* TODO: Extract stat label font-size */;
+      color: /* TODO: Extract stat label color */;
+    }
+    .stat-value {
+      font-size: /* TODO: Extract stat value font-size */;
+      font-weight: /* TODO: Extract stat value font-weight */;
+      line-height: /* TODO: Extract stat value line-height */;
+      margin-top: /* TODO: Extract stat value margin-top */;
+    }
+    .stat-helper {
+      font-size: /* TODO: Extract stat helper font-size */;
+      color: /* TODO: Extract stat helper color */;
+      margin-top: /* TODO: Extract stat helper margin-top */;
+    }
+
+    /* ---- Action/Create Card (Dashed) ---- */
+    .card-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: /* TODO: Extract action card padding */;
+      border: /* TODO: Extract dashed border style (e.g., 2px dashed var(--primary)) */;
+      border-radius: /* TODO: Extract action card border-radius */;
+      color: /* TODO: Extract action card text color */;
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.15s;
+      min-height: /* TODO: Extract action card min-height */;
+    }
+    .card-action:hover {
+      background: /* TODO: Extract action card hover background */;
+    }
+    .card-action-icon {
+      font-size: /* TODO: Extract action card icon size */;
+      margin-bottom: /* TODO: Extract icon margin-bottom */;
+    }
+    .card-action-text {
+      font-weight: /* TODO: Extract action card text font-weight */;
+    }
+
+    /* ============================================================
+       SECTION 6: BADGES & TAGS
+       Assigned to: Subagent 3 (continued)
+       Lines: ~725-820
+       ============================================================ */
+
+    /* ---- Base Badge ---- */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: /* TODO: Extract badge padding */;
+      font-size: /* TODO: Extract badge font-size */;
+      font-weight: /* TODO: Extract badge font-weight */;
+      line-height: 1.5;
+      border-radius: /* TODO: Extract badge border-radius */;
+      white-space: nowrap;
+    }
+
+    /* ---- Badge Variants ---- */
+    .badge-default {
+      background: /* TODO: Extract default badge background */;
+      color: /* TODO: Extract default badge text color */;
+    }
+    .badge-secondary {
+      background: /* TODO: Extract secondary badge background */;
+      color: /* TODO: Extract secondary badge text color */;
+    }
+    .badge-outline {
+      background: transparent;
+      border: /* TODO: Extract outline badge border */;
+      color: /* TODO: Extract outline badge text color */;
+    }
+    .badge-success {
+      background: /* TODO: Extract success badge background */;
+      color: /* TODO: Extract success badge text color */;
+    }
+    .badge-warning {
+      background: /* TODO: Extract warning badge background */;
+      color: /* TODO: Extract warning badge text color */;
+    }
+    .badge-destructive {
+      background: /* TODO: Extract destructive badge background */;
+      color: /* TODO: Extract destructive badge text color */;
+    }
+
+    /* ---- Tag/Chip ---- */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: /* TODO: Extract tag gap */;
+      padding: /* TODO: Extract tag padding */;
+      font-size: /* TODO: Extract tag font-size */;
+      font-weight: /* TODO: Extract tag font-weight */;
+      background: /* TODO: Extract tag background */;
+      color: /* TODO: Extract tag text color */;
+      border-radius: /* TODO: Extract tag border-radius */;
+    }
+    .tag-removable {
+      padding-right: /* TODO: Extract removable tag padding-right */;
+    }
+    .tag-remove {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: /* TODO: Extract tag remove button background */;
+      color: /* TODO: Extract tag remove button color */;
+      cursor: pointer;
+      border: none;
+      font-size: 10px;
+    }
+
+    /* ============================================================
+       SECTION 7: AVATARS
+       Assigned to: Subagent 3 (continued)
+       Lines: ~825-900
+       ============================================================ */
+
+    /* ---- Base Avatar ---- */
+    .avatar {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: /* TODO: Extract avatar fallback background */;
+      color: /* TODO: Extract avatar fallback text color */;
+      font-weight: /* TODO: Extract avatar font-weight */;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ---- Avatar Sizes ---- */
+    .avatar-sm {
+      width: /* TODO: Extract small avatar size */;
+      height: /* TODO: Extract small avatar size */;
+      font-size: /* TODO: Extract small avatar font-size */;
+    }
+    .avatar-md {
+      width: /* TODO: Extract medium avatar size */;
+      height: /* TODO: Extract medium avatar size */;
+      font-size: /* TODO: Extract medium avatar font-size */;
+    }
+    .avatar-lg {
+      width: /* TODO: Extract large avatar size */;
+      height: /* TODO: Extract large avatar size */;
+      font-size: /* TODO: Extract large avatar font-size */;
+    }
+    .avatar-xl {
+      width: /* TODO: Extract extra large avatar size */;
+      height: /* TODO: Extract extra large avatar size */;
+      font-size: /* TODO: Extract extra large avatar font-size */;
+    }
+
+    /* ---- Avatar Group ---- */
+    .avatar-group {
+      display: flex;
+    }
+    .avatar-group .avatar {
+      border: /* TODO: Extract avatar group border */;
+      margin-left: /* TODO: Extract avatar group overlap (negative value) */;
+    }
+    .avatar-group .avatar:first-child {
+      margin-left: 0;
+    }
+
+    /* ============================================================
+       SECTION 8: TABLES
+       Assigned to: Subagent 4
+       Lines: ~905-1020
+       ============================================================ */
+
+    /* ---- Table Container ---- */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: /* TODO: Extract table container border */;
+      border-radius: /* TODO: Extract table container border-radius */;
+    }
+
+    /* ---- Table ---- */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: /* TODO: Extract table font-size */;
+    }
+    .table th {
+      text-align: left;
+      padding: /* TODO: Extract table header padding */;
+      font-weight: /* TODO: Extract table header font-weight */;
+      font-size: /* TODO: Extract table header font-size */;
+      color: /* TODO: Extract table header color */;
+      background: /* TODO: Extract table header background */;
+      border-bottom: /* TODO: Extract table header border-bottom */;
+    }
+    .table td {
+      padding: /* TODO: Extract table cell padding */;
+      border-bottom: /* TODO: Extract table cell border-bottom */;
+    }
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+    .table tbody tr:hover {
+      background: /* TODO: Extract table row hover background */;
+    }
+
+    /* ---- Sortable Header ---- */
+    .table th.sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+    .table th.sortable:hover {
+      color: /* TODO: Extract sortable header hover color */;
+    }
+    .table th .sort-icon {
+      margin-left: 4px;
+    }
+
+    /* ---- Compact Table ---- */
+    .table-compact th,
+    .table-compact td {
+      padding: /* TODO: Extract compact table padding */;
+    }
+
+    /* ---- Table Footer ---- */
+    .table tfoot td {
+      font-weight: /* TODO: Extract table footer font-weight */;
+      background: /* TODO: Extract table footer background */;
+    }
+
+    /* ============================================================
+       SECTION 9: NAVIGATION & TABS
+       Assigned to: Subagent 4 (continued)
+       Lines: ~1025-1150
+       ============================================================ */
+
+    /* ---- Underline Tabs ---- */
+    .tabs {
+      display: flex;
+      gap: /* TODO: Extract tabs gap */;
+      border-bottom: /* TODO: Extract tabs border-bottom */;
+    }
+    .tab {
+      padding: /* TODO: Extract tab padding */;
+      font-weight: /* TODO: Extract tab font-weight */;
+      font-size: /* TODO: Extract tab font-size */;
+      color: /* TODO: Extract tab color */;
+      background: none;
+      border: none;
+      border-bottom: /* TODO: Extract tab border-bottom (e.g., 2px solid transparent) */;
+      margin-bottom: -1px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab:hover {
+      color: /* TODO: Extract tab hover color */;
+    }
+    .tab.active {
+      color: /* TODO: Extract active tab color */;
+      border-bottom-color: /* TODO: Extract active tab border color */;
+    }
+
+    /* ---- Pill Tabs / Segmented Control ---- */
+    .tabs-pill {
+      display: inline-flex;
+      background: /* TODO: Extract pill tabs background */;
+      padding: /* TODO: Extract pill tabs padding */;
+      border-radius: /* TODO: Extract pill tabs border-radius */;
+      gap: /* TODO: Extract pill tabs gap */;
+    }
+    .tab-pill {
+      padding: /* TODO: Extract pill tab padding */;
+      font-size: /* TODO: Extract pill tab font-size */;
+      font-weight: /* TODO: Extract pill tab font-weight */;
+      color: /* TODO: Extract pill tab color */;
+      background: transparent;
+      border: none;
+      border-radius: /* TODO: Extract pill tab border-radius */;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab-pill:hover {
+      color: /* TODO: Extract pill tab hover color */;
+    }
+    .tab-pill.active {
+      background: /* TODO: Extract active pill tab background */;
+      color: /* TODO: Extract active pill tab color */;
+      box-shadow: /* TODO: Extract active pill tab shadow */;
+    }
+
+    /* ---- Filter Pills ---- */
+    .filter-pills {
+      display: flex;
+      gap: /* TODO: Extract filter pills gap */;
+    }
+    .filter-pill {
+      padding: /* TODO: Extract filter pill padding */;
+      font-size: /* TODO: Extract filter pill font-size */;
+      font-weight: /* TODO: Extract filter pill font-weight */;
+      color: /* TODO: Extract filter pill color */;
+      background: transparent;
+      border: none;
+      border-radius: /* TODO: Extract filter pill border-radius */;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-pill:hover {
+      background: /* TODO: Extract filter pill hover background */;
+    }
+    .filter-pill.active {
+      background: /* TODO: Extract active filter pill background */;
+      color: /* TODO: Extract active filter pill color */;
+    }
+
+    /* ---- Breadcrumbs ---- */
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: /* TODO: Extract breadcrumbs gap */;
+      font-size: /* TODO: Extract breadcrumbs font-size */;
+    }
+    .breadcrumb-item {
+      color: /* TODO: Extract breadcrumb item color */;
+      text-decoration: none;
+    }
+    .breadcrumb-item:hover {
+      color: /* TODO: Extract breadcrumb hover color */;
+      text-decoration: /* TODO: Extract breadcrumb hover decoration */;
+    }
+    .breadcrumb-item.active {
+      color: /* TODO: Extract active breadcrumb color */;
+    }
+    .breadcrumb-separator {
+      color: /* TODO: Extract breadcrumb separator color */;
+    }
+
+    /* ============================================================
+       SECTION 10: MODALS & DIALOGS
+       Assigned to: Subagent 5
+       Lines: ~1155-1280
+       ============================================================ */
+
+    /* ---- Modal Backdrop ---- */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: /* TODO: Extract modal backdrop background (e.g., rgba(0,0,0,0.5)) */;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ---- Modal Container ---- */
+    .modal {
+      background: /* TODO: Extract modal background */;
+      border: /* TODO: Extract modal border */;
+      border-radius: /* TODO: Extract modal border-radius */;
+      box-shadow: /* TODO: Extract modal shadow */;
+      max-width: /* TODO: Extract modal max-width */;
+      width: 90%;
+      max-height: 85vh;
+      overflow: auto;
+      transform: scale(0.95);
+      transition: transform 0.2s;
+    }
+    .modal-backdrop.open .modal {
+      transform: scale(1);
+    }
+
+    /* ---- Modal Header ---- */
+    .modal-header {
+      padding: /* TODO: Extract modal header padding */;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: /* TODO: Extract modal header border-bottom (if any) */;
+    }
+    .modal-title {
+      font-size: /* TODO: Extract modal title font-size */;
+      font-weight: /* TODO: Extract modal title font-weight */;
+    }
+    .modal-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: /* TODO: Extract close button width */;
+      height: /* TODO: Extract close button height */;
+      background: /* TODO: Extract close button background */;
+      border: none;
+      border-radius: /* TODO: Extract close button border-radius */;
+      cursor: pointer;
+      color: /* TODO: Extract close button color */;
+    }
+    .modal-close:hover {
+      background: /* TODO: Extract close button hover background */;
+    }
+
+    /* ---- Modal Body ---- */
+    .modal-body {
+      padding: /* TODO: Extract modal body padding */;
+    }
+
+    /* ---- Modal Footer ---- */
+    .modal-footer {
+      padding: /* TODO: Extract modal footer padding */;
+      display: flex;
+      justify-content: /* TODO: Extract modal footer justify-content */;
+      gap: /* TODO: Extract modal footer gap */;
+      border-top: /* TODO: Extract modal footer border-top (if any) */;
+    }
+
+    /* ============================================================
+       SECTION 11: DROPDOWNS & POPOVERS
+       Assigned to: Subagent 5 (continued)
+       Lines: ~1285-1400
+       ============================================================ */
+
+    /* ---- Dropdown ---- */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-content {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: /* TODO: Extract dropdown margin-top */;
+      min-width: /* TODO: Extract dropdown min-width */;
+      background: /* TODO: Extract dropdown background */;
+      border: /* TODO: Extract dropdown border */;
+      border-radius: /* TODO: Extract dropdown border-radius */;
+      box-shadow: /* TODO: Extract dropdown shadow */;
+      padding: /* TODO: Extract dropdown padding */;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.15s ease;
+    }
+    .dropdown.open .dropdown-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* ---- Dropdown Item ---- */
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: /* TODO: Extract dropdown item gap */;
+      padding: /* TODO: Extract dropdown item padding */;
+      font-size: /* TODO: Extract dropdown item font-size */;
+      color: /* TODO: Extract dropdown item color */;
+      border-radius: /* TODO: Extract dropdown item border-radius */;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .dropdown-item:hover {
+      background: /* TODO: Extract dropdown item hover background */;
+    }
+    .dropdown-item svg {
+      width: 16px;
+      height: 16px;
+      color: /* TODO: Extract dropdown item icon color */;
+    }
+    .dropdown-item-destructive {
+      color: /* TODO: Extract destructive item color */;
+    }
+    .dropdown-item-destructive svg {
+      color: /* TODO: Extract destructive item icon color */;
+    }
+
+    /* ---- Dropdown Separator ---- */
+    .dropdown-separator {
+      height: 1px;
+      background: /* TODO: Extract dropdown separator color */;
+      margin: /* TODO: Extract dropdown separator margin */;
+    }
+
+    /* ---- Dropdown Label ---- */
+    .dropdown-label {
+      padding: /* TODO: Extract dropdown label padding */;
+      font-size: /* TODO: Extract dropdown label font-size */;
+      font-weight: /* TODO: Extract dropdown label font-weight */;
+      color: /* TODO: Extract dropdown label color */;
+    }
+
+    /* ---- Tooltip ---- */
+    .tooltip-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: /* TODO: Extract tooltip margin-bottom */;
+      padding: /* TODO: Extract tooltip padding */;
+      background: /* TODO: Extract tooltip background */;
+      color: /* TODO: Extract tooltip color */;
+      font-size: /* TODO: Extract tooltip font-size */;
+      border-radius: /* TODO: Extract tooltip border-radius */;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s, visibility 0.15s;
+      z-index: 100;
+    }
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: /* TODO: Extract tooltip arrow color (same as background) */;
+    }
+    .tooltip-wrapper:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ============================================================
+       SECTION 12: ALERTS & FEEDBACK
+       Assigned to: Subagent 6
+       Lines: ~1405-1500
+       ============================================================ */
+
+    /* ---- Alert ---- */
+    .alert {
+      display: flex;
+      gap: /* TODO: Extract alert gap */;
+      padding: /* TODO: Extract alert padding */;
+      border-radius: /* TODO: Extract alert border-radius */;
+      border: /* TODO: Extract alert border */;
+    }
+    .alert-icon {
+      flex-shrink: 0;
+      width: /* TODO: Extract alert icon size */;
+      height: /* TODO: Extract alert icon size */;
+    }
+    .alert-content {
+      flex: 1;
+    }
+    .alert-title {
+      font-size: /* TODO: Extract alert title font-size */;
+      font-weight: /* TODO: Extract alert title font-weight */;
+      margin-bottom: /* TODO: Extract alert title margin-bottom */;
+    }
+    .alert-description {
+      font-size: /* TODO: Extract alert description font-size */;
+      color: /* TODO: Extract alert description color */;
+    }
+
+    /* ---- Alert Variants ---- */
+    .alert-default {
+      background: /* TODO: Extract default alert background */;
+      border-color: /* TODO: Extract default alert border-color */;
+    }
+    .alert-success {
+      background: /* TODO: Extract success alert background */;
+      border-color: /* TODO: Extract success alert border-color */;
+      color: /* TODO: Extract success alert text color */;
+    }
+    .alert-warning {
+      background: /* TODO: Extract warning alert background */;
+      border-color: /* TODO: Extract warning alert border-color */;
+      color: /* TODO: Extract warning alert text color */;
+    }
+    .alert-destructive {
+      background: /* TODO: Extract destructive alert background */;
+      border-color: /* TODO: Extract destructive alert border-color */;
+      color: /* TODO: Extract destructive alert text color */;
+    }
+
+    /* ============================================================
+       SECTION 13: PROGRESS & LOADING
+       Assigned to: Subagent 6 (continued)
+       Lines: ~1505-1600
+       ============================================================ */
+
+    /* ---- Progress Bar ---- */
+    .progress {
+      width: 100%;
+      height: /* TODO: Extract progress bar height */;
+      background: /* TODO: Extract progress track background */;
+      border-radius: /* TODO: Extract progress border-radius */;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: /* TODO: Extract progress fill background */;
+      border-radius: /* TODO: Extract progress fill border-radius */;
+      transition: width 0.3s ease;
+    }
+
+    /* ---- Progress Sizes ---- */
+    .progress-sm {
+      height: /* TODO: Extract small progress height */;
+    }
+    .progress-lg {
+      height: /* TODO: Extract large progress height */;
+    }
+
+    /* ---- Skeleton Loader ---- */
+    .skeleton {
+      background: linear-gradient(90deg, var(--muted) 25%, var(--gray-200) 50%, var(--muted) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: /* TODO: Extract skeleton border-radius */;
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ---- Spinner ---- */
+    .spinner {
+      width: /* TODO: Extract spinner size */;
+      height: /* TODO: Extract spinner size */;
+      border: /* TODO: Extract spinner border thickness */ solid var(--muted);
+      border-top-color: /* TODO: Extract spinner active color */;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ============================================================
+       SECTION 14: LINKS & TYPOGRAPHY
+       Assigned to: Subagent 6 (continued)
+       Lines: ~1605-1700
+       ============================================================ */
+
+    /* ---- Links ---- */
+    .link {
+      color: /* TODO: Extract link color */;
+      text-decoration: /* TODO: Extract link text-decoration */;
+      font-weight: /* TODO: Extract link font-weight */;
+    }
+    .link:hover {
+      text-decoration: /* TODO: Extract link hover text-decoration */;
+      color: /* TODO: Extract link hover color */;
+    }
+    .link-destructive {
+      color: /* TODO: Extract destructive link color */;
+    }
+    .link-muted {
+      color: /* TODO: Extract muted link color */;
+    }
+
+    /* ---- Headings ---- */
+    h1, .h1 {
+      font-size: /* TODO: Extract h1 font-size */;
+      font-weight: /* TODO: Extract h1 font-weight */;
+      line-height: /* TODO: Extract h1 line-height */;
+    }
+    h2, .h2 {
+      font-size: /* TODO: Extract h2 font-size */;
+      font-weight: /* TODO: Extract h2 font-weight */;
+      line-height: /* TODO: Extract h2 line-height */;
+    }
+    h3, .h3 {
+      font-size: /* TODO: Extract h3 font-size */;
+      font-weight: /* TODO: Extract h3 font-weight */;
+      line-height: /* TODO: Extract h3 line-height */;
+    }
+    h4, .h4 {
+      font-size: /* TODO: Extract h4 font-size */;
+      font-weight: /* TODO: Extract h4 font-weight */;
+      line-height: /* TODO: Extract h4 line-height */;
+    }
+
+    /* ---- Text Utilities ---- */
+    .text-muted { color: var(--muted-foreground); }
+    .text-success { color: var(--success); }
+    .text-error { color: var(--error); }
+    .text-warning { color: var(--warning); }
+    .text-sm { font-size: var(--font-size-sm); }
+    .text-xs { font-size: var(--font-size-xs); }
+    .text-lg { font-size: var(--font-size-lg); }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="page-title">{{BRAND}} Design System</h1>
+    <p class="page-subtitle">Component library extracted from {{URL}}</p>
+
+    <!-- ============================================================
+         COLORS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Colors</h2>
+      <div class="subsection">
+        <h3 class="subsection-title">Brand Colors</h3>
+        <div class="component-row">
+          <!-- TODO: Add color swatches for primary, secondary, accent colors -->
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 60px; background: var(--primary); border-radius: var(--radius-md); margin-bottom: 8px;"></div>
+            <div style="font-size: 12px; font-weight: 500;">Primary</div>
+            <div style="font-size: 11px; color: var(--muted-foreground);">/* TODO: hex */</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 60px; background: var(--btn-primary); border-radius: var(--radius-md); margin-bottom: 8px;"></div>
+            <div style="font-size: 12px; font-weight: 500;">Button Primary</div>
+            <div style="font-size: 11px; color: var(--muted-foreground);">/* TODO: hex */</div>
+          </div>
+          <!-- TODO: Add more brand color swatches -->
+        </div>
+      </div>
+      <div class="subsection">
+        <h3 class="subsection-title">Gray Palette</h3>
+        <div class="component-row">
+          <!-- TODO: Add gray scale swatches from gray-50 to gray-900 -->
+        </div>
+      </div>
+      <div class="subsection">
+        <h3 class="subsection-title">Status Colors</h3>
+        <div class="component-row">
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 60px; background: var(--success); border-radius: var(--radius-md); margin-bottom: 8px;"></div>
+            <div style="font-size: 12px; font-weight: 500;">Success</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 60px; background: var(--warning); border-radius: var(--radius-md); margin-bottom: 8px;"></div>
+            <div style="font-size: 12px; font-weight: 500;">Warning</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 80px; height: 60px; background: var(--error); border-radius: var(--radius-md); margin-bottom: 8px;"></div>
+            <div style="font-size: 12px; font-weight: 500;">Error</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         BUTTONS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Buttons</h2>
+      <div class="subsection">
+        <h3 class="subsection-title">Variants</h3>
+        <div class="component-row">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-secondary">Secondary</button>
+          <button class="btn btn-outline">Outline</button>
+          <button class="btn btn-ghost">Ghost</button>
+          <button class="btn btn-destructive">Destructive</button>
+          <button class="btn btn-link">Link</button>
+        </div>
+      </div>
+      <div class="subsection">
+        <h3 class="subsection-title">Sizes</h3>
+        <div class="component-row">
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-primary">Default</button>
+          <button class="btn btn-primary btn-lg">Large</button>
+        </div>
+      </div>
+      <div class="subsection">
+        <h3 class="subsection-title">States</h3>
+        <div class="component-row">
+          <button class="btn btn-primary">Normal</button>
+          <button class="btn btn-primary" disabled>Disabled</button>
+        </div>
+      </div>
+      <div class="subsection">
+        <h3 class="subsection-title">With Icons</h3>
+        <div class="component-row">
+          <button class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Add Item
+          </button>
+          <button class="btn btn-outline">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </button>
+          <button class="btn btn-ghost btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         FORM INPUTS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Form Inputs</h2>
+      <div class="demo-grid demo-grid-2">
+        <div class="subsection">
+          <h3 class="subsection-title">Text Input</h3>
+          <div class="form-group">
+            <label class="label">Email</label>
+            <input type="email" class="input" placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label class="label label-required">Password</label>
+            <input type="password" class="input" placeholder="Enter password">
+            <p class="helper-text">Must be at least 8 characters</p>
+          </div>
+        </div>
+        <div class="subsection">
+          <h3 class="subsection-title">Input Sizes</h3>
+          <div class="form-group">
+            <input type="text" class="input input-sm" placeholder="Small input">
+          </div>
+          <div class="form-group">
+            <input type="text" class="input" placeholder="Default input">
+          </div>
+          <div class="form-group">
+            <input type="text" class="input input-lg" placeholder="Large input">
+          </div>
+        </div>
+        <div class="subsection">
+          <h3 class="subsection-title">Input States</h3>
+          <div class="form-group">
+            <input type="text" class="input" placeholder="Normal">
+          </div>
+          <div class="form-group">
+            <input type="text" class="input input-error" placeholder="Error state">
+            <p class="helper-text helper-text-error">This field is required</p>
+          </div>
+          <div class="form-group">
+            <input type="text" class="input" placeholder="Disabled" disabled>
+          </div>
+        </div>
+        <div class="subsection">
+          <h3 class="subsection-title">Textarea</h3>
+          <div class="form-group">
+            <label class="label">Message</label>
+            <textarea class="textarea" placeholder="Type your message here..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SELECT SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Select / Dropdown</h2>
+      <div class="demo-grid demo-grid-2">
+        <div class="subsection">
+          <h3 class="subsection-title">Basic Select</h3>
+          <div class="select" style="max-width: 300px;">
+            <button class="select-trigger" onclick="this.parentElement.classList.toggle('open')">
+              <span>Select an option...</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="select-content">
+              <div class="select-item">Option 1</div>
+              <div class="select-item selected">Option 2</div>
+              <div class="select-item">Option 3</div>
+              <div class="select-item">Option 4</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         CHECKBOXES, RADIOS, TOGGLES SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Checkboxes, Radios & Toggles</h2>
+      <div class="demo-grid demo-grid-3">
+        <div class="subsection">
+          <h3 class="subsection-title">Checkboxes</h3>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <label class="label-inline">
+              <input type="checkbox" class="checkbox">
+              <span>Unchecked</span>
+            </label>
+            <label class="label-inline">
+              <input type="checkbox" class="checkbox" checked>
+              <span>Checked</span>
+            </label>
+            <label class="label-inline">
+              <input type="checkbox" class="checkbox" disabled>
+              <span>Disabled</span>
+            </label>
+          </div>
+        </div>
+        <div class="subsection">
+          <h3 class="subsection-title">Radio Buttons</h3>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <label class="label-inline">
+              <input type="radio" name="demo-radio" class="radio" checked>
+              <span>Option A</span>
+            </label>
+            <label class="label-inline">
+              <input type="radio" name="demo-radio" class="radio">
+              <span>Option B</span>
+            </label>
+            <label class="label-inline">
+              <input type="radio" name="demo-radio" class="radio">
+              <span>Option C</span>
+            </label>
+          </div>
+        </div>
+        <div class="subsection">
+          <h3 class="subsection-title">Toggle Switch</h3>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <label class="label-inline">
+              <div class="toggle" onclick="this.classList.toggle('checked')">
+                <div class="toggle-thumb"></div>
+              </div>
+              <span>Off</span>
+            </label>
+            <label class="label-inline">
+              <div class="toggle checked" onclick="this.classList.toggle('checked')">
+                <div class="toggle-thumb"></div>
+              </div>
+              <span>On</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         CARDS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Cards</h2>
+      <div class="demo-grid demo-grid-3">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Card Title</div>
+            <div class="card-description">Card description goes here</div>
+          </div>
+          <div class="card-content">
+            <p>Card content with some sample text.</p>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-outline btn-sm">Cancel</button>
+            <button class="btn btn-primary btn-sm">Save</button>
+          </div>
+        </div>
+        <div class="card card-interactive">
+          <div class="card-header">
+            <div class="card-title">Interactive Card</div>
+            <div class="card-description">Hover to see effect</div>
+          </div>
+          <div class="card-content">
+            <p>This card has hover states.</p>
+          </div>
+        </div>
+        <button class="card-action">
+          <span class="card-action-icon">+</span>
+          <span class="card-action-text">Create New</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         BADGES & TAGS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Badges & Tags</h2>
+      <div class="subsection">
+        <h3 class="subsection-title">Badges</h3>
+        <div class="component-row">
+          <span class="badge badge-default">Default</span>
+          <span class="badge badge-secondary">Secondary</span>
+          <span class="badge badge-outline">Outline</span>
+          <span class="badge badge-success">Success</span>
+          <span class="badge badge-warning">Warning</span>
+          <span class="badge badge-destructive">Error</span>
+        </div>
+      </div>
+      <div class="subsection">
+        <h3 class="subsection-title">Tags</h3>
+        <div class="component-row">
+          <span class="tag">Default Tag</span>
+          <span class="tag tag-removable">
+            Removable
+            <button class="tag-remove">×</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         AVATARS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Avatars</h2>
+      <div class="subsection">
+        <h3 class="subsection-title">Sizes</h3>
+        <div class="component-row">
+          <div class="avatar avatar-sm">SM</div>
+          <div class="avatar avatar-md">MD</div>
+          <div class="avatar avatar-lg">LG</div>
+          <div class="avatar avatar-xl">XL</div>
+        </div>
+      </div>
+      <div class="subsection">
+        <h3 class="subsection-title">Avatar Group</h3>
+        <div class="avatar-group">
+          <div class="avatar avatar-md">A</div>
+          <div class="avatar avatar-md">B</div>
+          <div class="avatar avatar-md">C</div>
+          <div class="avatar avatar-md">+3</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         TABLES SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Tables</h2>
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th style="text-align: right;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 500;">John Doe</td>
+              <td>john@example.com</td>
+              <td><span class="badge badge-success">Active</span></td>
+              <td style="text-align: right;">$250.00</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 500;">Jane Smith</td>
+              <td>jane@example.com</td>
+              <td><span class="badge badge-warning">Pending</span></td>
+              <td style="text-align: right;">$150.00</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 500;">Bob Wilson</td>
+              <td>bob@example.com</td>
+              <td><span class="badge badge-secondary">Inactive</span></td>
+              <td style="text-align: right;">$350.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         NAVIGATION & TABS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Navigation & Tabs</h2>
+      <div class="subsection">
+        <h3 class="subsection-title">Underline Tabs</h3>
+        <div class="tabs">
+          <button class="tab active">Account</button>
+          <button class="tab">Password</button>
+          <button class="tab">Notifications</button>
+        </div>
+      </div>
+      <div class="subsection" style="margin-top: 32px;">
+        <h3 class="subsection-title">Pill Tabs</h3>
+        <div class="tabs-pill">
+          <button class="tab-pill active">All</button>
+          <button class="tab-pill">Active</button>
+          <button class="tab-pill">Inactive</button>
+        </div>
+      </div>
+      <div class="subsection" style="margin-top: 32px;">
+        <h3 class="subsection-title">Filter Pills</h3>
+        <div class="filter-pills">
+          <button class="filter-pill active">All</button>
+          <button class="filter-pill">Boys</button>
+          <button class="filter-pill">Girls</button>
+        </div>
+      </div>
+      <div class="subsection" style="margin-top: 32px;">
+        <h3 class="subsection-title">Breadcrumbs</h3>
+        <nav class="breadcrumbs">
+          <a href="#" class="breadcrumb-item">Home</a>
+          <span class="breadcrumb-separator">/</span>
+          <a href="#" class="breadcrumb-item">Products</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-item active">Details</span>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         MODALS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Modals & Dialogs</h2>
+      <div class="subsection">
+        <h3 class="subsection-title">Modal Demo</h3>
+        <button class="btn btn-primary" onclick="document.getElementById('demo-modal').classList.add('open')">Open Modal</button>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal-backdrop" id="demo-modal" onclick="this.classList.remove('open')">
+        <div class="modal" onclick="event.stopPropagation()">
+          <div class="modal-header">
+            <span class="modal-title">Edit Profile</span>
+            <button class="modal-close" onclick="document.getElementById('demo-modal').classList.remove('open')">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="label">Name</label>
+              <input type="text" class="input" value="John Doe">
+            </div>
+            <div class="form-group">
+              <label class="label">Email</label>
+              <input type="email" class="input" value="john@example.com">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline" onclick="document.getElementById('demo-modal').classList.remove('open')">Cancel</button>
+            <button class="btn btn-primary">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         DROPDOWNS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Dropdowns & Menus</h2>
+      <div class="subsection">
+        <h3 class="subsection-title">Dropdown Menu</h3>
+        <div class="dropdown">
+          <button class="btn btn-outline" onclick="this.parentElement.classList.toggle('open')">
+            Open Menu
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="dropdown-content">
+            <div class="dropdown-label">My Account</div>
+            <div class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Profile
+            </div>
+            <div class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+              Settings
+            </div>
+            <div class="dropdown-separator"></div>
+            <div class="dropdown-item dropdown-item-destructive">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log out
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="subsection" style="margin-top: 32px;">
+        <h3 class="subsection-title">Tooltip</h3>
+        <div class="tooltip-wrapper">
+          <button class="btn btn-outline">Hover me</button>
+          <div class="tooltip">This is a tooltip</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ALERTS SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Alerts</h2>
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 600px;">
+        <div class="alert alert-default">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div class="alert-content">
+            <div class="alert-title">Information</div>
+            <div class="alert-description">This is an informational message.</div>
+          </div>
+        </div>
+        <div class="alert alert-success">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div class="alert-content">
+            <div class="alert-title">Success</div>
+            <div class="alert-description">Your changes have been saved.</div>
+          </div>
+        </div>
+        <div class="alert alert-warning">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="alert-content">
+            <div class="alert-title">Warning</div>
+            <div class="alert-description">Please review before proceeding.</div>
+          </div>
+        </div>
+        <div class="alert alert-destructive">
+          <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <div class="alert-content">
+            <div class="alert-title">Error</div>
+            <div class="alert-description">Something went wrong.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         PROGRESS & LOADING SECTION
+         ============================================================ -->
+    <div class="section">
+      <h2 class="section-title">Progress & Loading</h2>
+      <div class="demo-grid demo-grid-2">
+        <div class="subsection">
+          <h3 class="subsection-title">Progress Bars</h3>
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+                <span>Progress</span>
+                <span>25%</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar" style="width: 25%;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+                <span>Progress</span>
+                <span>60%</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar" style="width: 60%;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+                <span>Complete</span>
+                <span>100%</span>
+              </div>
+              <div class="progress">
+                <div class="progress-bar" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="subsection">
+          <h3 class="subsection-title">Skeleton Loaders</h3>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div class="skeleton" style="width: 48px; height: 48px; border-radius: 50%;"></div>
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                <div class="skeleton" style="height: 16px; width: 60%;"></div>
+                <div class="skeleton" style="height: 12px; width: 40%;"></div>
+              </div>
+            </div>
+            <div class="skeleton" style="height: 100px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT FOR INTERACTIVITY
+       ============================================================ -->
+  <script>
+    // Close dropdowns/selects when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+      }
+      if (!e.target.closest('.select')) {
+        document.querySelectorAll('.select.open').forEach(s => s.classList.remove('open'));
+      }
+    });
+
+    // Tab switching
+    document.querySelectorAll('.tabs').forEach(tabs => {
+      tabs.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+    });
+
+    // Pill tabs switching
+    document.querySelectorAll('.tabs-pill').forEach(tabs => {
+      tabs.querySelectorAll('.tab-pill').forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.querySelectorAll('.tab-pill').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+    });
+
+    // Filter pills switching
+    document.querySelectorAll('.filter-pills').forEach(pills => {
+      pills.querySelectorAll('.filter-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          pills.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+        });
+      });
+    });
+
+    // Close modal on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+  </script>
+</body>
+</html>

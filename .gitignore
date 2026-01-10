@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+out/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+.temp*
+tmp/
+*.tmp
+
+# Cache
+.cache/
+.eslintcache
+.parcel-cache/
+
+# skills to hide
+skills/audit/
+skills/web-app-design/
+skills/webapp-testing/

@@ -1,0 +1,8 @@
+{
+  "hooks": [
+    {
+      "type": "SessionStart",
+      "command": "git -C \"$HOME/.claude/plugins/trace-tools\" pull --quiet 2>/dev/null || true"
+    }
+  ]
+}

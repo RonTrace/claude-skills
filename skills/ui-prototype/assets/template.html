@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{PROTOTYPE_TITLE}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================
+           TRACE UI DESIGN SYSTEM
+           ========================================== */
+        :root {
+            /* Gray palette */
+            --gray-50: #fafafa;
+            --gray-100: #f4f4f5;
+            --gray-200: #e4e4e7;
+            --gray-300: #d4d4d8;
+            --gray-400: #a1a1aa;
+            --gray-500: #71717a;
+            --gray-600: #52525b;
+            --gray-700: #3f3f46;
+            --gray-800: #27272a;
+            --gray-900: #18181b;
+            --gray-950: #09090b;
+
+            /* Semantic colors */
+            --background: #ffffff;
+            --foreground: var(--gray-950);
+            --card: #ffffff;
+            --primary: #393C3C;
+            --btn-primary: #18929A;
+            --btn-primary-hover: #147a80;
+            --muted: var(--gray-100);
+            --muted-foreground: var(--gray-500);
+            --border: var(--gray-200);
+
+            /* Radius & Shadows */
+            --radius: 10px;
+            --radius-lg: 14px;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ==========================================
+           HIDDEN CONTROLS PANEL
+           ========================================== */
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            max-width: 300px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .controls.hidden {
+            transform: translateX(calc(100% + 40px));
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .controls h3 {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--muted-foreground);
+            margin-bottom: 10px;
+        }
+
+        .control-section {
+            margin-bottom: 14px;
+        }
+
+        .control-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            background: var(--background);
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            color: var(--foreground);
+        }
+
+        .control-btn:hover {
+            background: var(--muted);
+        }
+
+        .control-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .controls-hint {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 11px;
+            color: var(--muted-foreground);
+            background: var(--card);
+            padding: 6px 10px;
+            border-radius: 6px;
+            box-shadow: var(--shadow);
+        }
+
+        /* ==========================================
+           PHONE FRAME
+           ========================================== */
+        .phone-frame {
+            width: 390px;
+            height: 844px;
+            background: var(--background);
+            border-radius: 50px;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            overflow: hidden;
+            position: relative;
+            border: 10px solid var(--gray-900);
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 34px;
+            background: var(--gray-900);
+            border-radius: 0 0 20px 20px;
+            z-index: 100;
+        }
+
+        .phone-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ==========================================
+           COMMON COMPONENTS
+           ========================================== */
+
+        /* Header */
+        .header {
+            padding: 50px 20px 16px;
+            flex-shrink: 0;
+            background: var(--background);
+        }
+
+        /* Scrollable Content Area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+        }
+
+        /* Sticky Bottom Bar */
+        .bottom-bar {
+            flex-shrink: 0;
+            padding: 12px 20px;
+            padding-bottom: calc(12px + 20px); /* safe area */
+            background: var(--background);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary {
+            background: var(--btn-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--btn-primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--muted);
+            color: var(--foreground);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        /* ==========================================
+           {{CUSTOM_STYLES}}
+           ========================================== */
+    </style>
+</head>
+<body>
+    <!-- Controls Panel (hidden by default, Cmd/Ctrl+Shift+P to toggle) -->
+    <div class="controls hidden" id="controls">
+        <div class="control-section">
+            <h3>State</h3>
+            <div class="control-row">
+                <button class="control-btn active" data-state="default">Default</button>
+                <button class="control-btn" data-state="loading">Loading</button>
+                <button class="control-btn" data-state="empty">Empty</button>
+                <button class="control-btn" data-state="error">Error</button>
+            </div>
+        </div>
+        <!-- {{ADDITIONAL_CONTROLS}} -->
+    </div>
+
+    <div class="controls-hint">Press Cmd+Shift+P to toggle controls</div>
+
+    <!-- Phone Frame -->
+    <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-content">
+            <!-- {{PROTOTYPE_CONTENT}} -->
+
+            <div class="header">
+                <h1 style="font-size: 24px; font-weight: 700;">{{SCREEN_TITLE}}</h1>
+            </div>
+
+            <div class="content">
+                <div class="card">
+                    <p style="color: var(--muted-foreground);">Prototype content goes here.</p>
+                </div>
+            </div>
+
+            <div class="bottom-bar">
+                <button class="btn btn-primary" style="width: 100%;">
+                    Primary Action
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CONTROLS TOGGLE
+        // ==========================================
+        const controls = document.getElementById('controls');
+
+        document.addEventListener('keydown', (e) => {
+            // Cmd+Shift+P (Mac) or Ctrl+Shift+P (Windows)
+            if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'p') {
+                e.preventDefault();
+                controls.classList.toggle('hidden');
+            }
+        });
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        let state = {
+            view: 'default'
+        };
+
+        function updateUI() {
+            // Implement state-based UI updates here
+            console.log('State updated:', state);
+        }
+
+        // Control button handlers
+        document.querySelectorAll('[data-state]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('[data-state]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.view = btn.dataset.state;
+                updateUI();
+            });
+        });
+
+        // ==========================================
+        // {{CUSTOM_SCRIPTS}}
+        // ==========================================
+
+        // Initial render
+        updateUI();
+    </script>
+</body>
+</html>

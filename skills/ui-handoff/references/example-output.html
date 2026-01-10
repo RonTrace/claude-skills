@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example - Component Library</title>
+    <style>
+        /* ========================================
+           DESIGN TOKENS (extracted from prototype)
+           ======================================== */
+        :root {
+            /* Primary Colors */
+            --primary: #18929A;
+            --primary-hover: #147a80;
+            --primary-light: rgba(24, 146, 154, 0.1);
+
+            /* Grays */
+            --gray-50: #fafafa;
+            --gray-100: #f5f5f5;
+            --gray-200: #e5e5e5;
+            --gray-300: #d4d4d4;
+            --gray-400: #a3a3a3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            --white: #ffffff;
+
+            /* Semantic Colors */
+            --success: #22c55e;
+            --success-light: #dcfce7;
+            --warning: #fbbf24;
+            --warning-light: #fef3c7;
+            --error: #dc2626;
+            --error-light: #fef2f2;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+        }
+
+        /* ========================================
+           LIBRARY LAYOUT STYLES
+           ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            line-height: 1.4;
+            padding: 40px;
+        }
+
+        .library-header {
+            max-width: 1200px;
+            margin: 0 auto 48px;
+        }
+
+        .library-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .library-header p {
+            font-size: 16px;
+            color: var(--gray-500);
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 0 auto 64px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+        }
+
+        .section-desc {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .component-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .component-preview {
+            padding: 24px;
+            background: var(--gray-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+
+        .component-preview.dark {
+            background: var(--gray-800);
+        }
+
+        .component-info {
+            padding: 12px 16px;
+            border-top: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .component-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .component-variant {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .component-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--gray-100);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            transition: all 0.15s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .action-btn.copied {
+            background: var(--success);
+            color: white;
+        }
+
+        .action-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .code-panel {
+            display: none;
+        }
+
+        /* ========================================
+           CODE MODAL
+           ======================================== */
+        .code-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .code-modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .code-modal {
+            background: var(--gray-900);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 700px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+        }
+
+        .code-modal-overlay.open .code-modal {
+            transform: scale(1);
+        }
+
+        .code-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-700);
+        }
+
+        .code-modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .code-modal-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .modal-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-btn.copy {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal-btn.copy:hover {
+            background: var(--primary-hover);
+        }
+
+        .modal-btn.copy.copied {
+            background: var(--success);
+        }
+
+        .modal-btn.close {
+            background: var(--gray-700);
+            color: var(--gray-300);
+        }
+
+        .modal-btn.close:hover {
+            background: var(--gray-600);
+        }
+
+        .modal-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .code-tabs {
+            display: flex;
+            background: var(--gray-800);
+            border-bottom: 1px solid var(--gray-700);
+        }
+
+        .code-tab {
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-400);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .code-tab:hover {
+            color: var(--gray-200);
+        }
+
+        .code-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .code-modal-body {
+            flex: 1;
+            overflow: auto;
+        }
+
+        .code-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .code-content.active {
+            display: block;
+        }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e5e5e5;
+            white-space: pre-wrap;
+        }
+
+        /* ========================================
+           COPY TOAST
+           ======================================== */
+        .copy-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--gray-900);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .copy-toast svg {
+            width: 18px;
+            height: 18px;
+            color: var(--success);
+        }
+
+        /* ========================================
+           DESIGN TOKEN SWATCHES
+           ======================================== */
+        .swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+        }
+
+        .swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .swatch-color {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .swatch-name {
+            font-size: 11px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        /* Helper classes */
+        .flex-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ========================================
+           EXTRACTED COMPONENT STYLES
+           ======================================== */
+
+        /* Button - Primary */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-primary svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.success {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .badge.warning {
+            background: var(--warning-light);
+            color: #92400e;
+        }
+
+        .badge.error {
+            background: var(--error-light);
+            color: var(--error);
+        }
+
+        /* Card */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-100);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        /* Toast */
+        .toast-example {
+            display: inline-block;
+            background: var(--gray-900);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Copy Toast -->
+    <div class="copy-toast" id="copyToast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Copied to clipboard!
+    </div>
+
+    <!-- Code Modal -->
+    <div class="code-modal-overlay" id="codeModal">
+        <div class="code-modal">
+            <div class="code-modal-header">
+                <span class="code-modal-title" id="modalTitle">Component Code</span>
+                <div class="code-modal-actions">
+                    <button class="modal-btn copy" id="modalCopyBtn" onclick="copyModalCode()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        Copy
+                    </button>
+                    <button class="modal-btn close" onclick="closeCodeModal()">Close</button>
+                </div>
+            </div>
+            <div class="code-tabs">
+                <button class="code-tab active" data-tab="html" onclick="switchModalTab(this, 'html')">HTML</button>
+                <button class="code-tab" data-tab="css" onclick="switchModalTab(this, 'css')">CSS</button>
+            </div>
+            <div class="code-modal-body">
+                <div class="code-content active" id="modalHtml" data-tab="html">
+                    <pre><code></code></pre>
+                </div>
+                <div class="code-content" id="modalCss" data-tab="css">
+                    <pre><code></code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="library-header">
+        <h1>Example - Component Library</h1>
+        <p>Visual components extracted from example-prototype.html. Click <strong>&lt;/&gt;</strong> to view code.</p>
+    </header>
+
+    <!-- ======================================== -->
+    <!-- SECTION: Design Tokens -->
+    <!-- ======================================== -->
+    <section class="section">
+        <h2 class="section-title">Design Tokens</h2>
+        <p class="section-desc">Core color palette and design variables.</p>
+
+        <div class="swatch-grid">
+            <div class="swatch">
+                <div class="swatch-color" style="background: var(--primary);"></div>
+                <span class="swatch-name">--primary</span>
+            </div>
+            <div class="swatch">
+                <div class="swatch-color" style="background: var(--gray-900);"></div>
+                <span class="swatch-name">--gray-900</span>
+            </div>
+            <div class="swatch">
+                <div class="swatch-color" style="background: var(--gray-500);"></div>
+                <span class="swatch-name">--gray-500</span>
+            </div>
+            <div class="swatch">
+                <div class="swatch-color" style="background: var(--success);"></div>
+                <span class="swatch-name">--success</span>
+            </div>
+            <div class="swatch">
+                <div class="swatch-color" style="background: var(--warning);"></div>
+                <span class="swatch-name">--warning</span>
+            </div>
+            <div class="swatch">
+                <div class="swatch-color" style="background: var(--error);"></div>
+                <span class="swatch-name">--error</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================== -->
+    <!-- SECTION: Buttons -->
+    <!-- ======================================== -->
+    <section class="section">
+        <h2 class="section-title">Buttons</h2>
+        <p class="section-desc">Interactive button components.</p>
+
+        <div class="component-grid">
+            <!-- Primary Button -->
+            <div class="component-card" data-component="btn-primary">
+                <div class="component-preview">
+                    <button class="btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        Upload
+                    </button>
+                </div>
+                <div class="component-info">
+                    <div class="component-meta">
+                        <div class="component-name">Primary Button</div>
+                        <div class="component-variant">With icon</div>
+                    </div>
+                    <div class="component-actions">
+                        <button class="action-btn" onclick="toggleCode(this)" title="View Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        </button>
+                        <button class="action-btn" onclick="copyCode(this)" title="Copy Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="code-panel">
+                    <div class="code-content" data-tab="html">
+<pre><code>&lt;button class="btn-primary"&gt;
+  &lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;
+    &lt;path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/&gt;
+    &lt;polyline points="17 8 12 3 7 8"/&gt;
+    &lt;line x1="12" y1="3" x2="12" y2="15"/&gt;
+  &lt;/svg&gt;
+  Upload
+&lt;/button&gt;</code></pre>
+                    </div>
+                    <div class="code-content" data-tab="css">
+<pre><code>.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================== -->
+    <!-- SECTION: Badges -->
+    <!-- ======================================== -->
+    <section class="section">
+        <h2 class="section-title">Badges</h2>
+        <p class="section-desc">Status indicators and labels.</p>
+
+        <div class="component-grid">
+            <!-- Badge States -->
+            <div class="component-card" data-component="badge-states">
+                <div class="component-preview">
+                    <div class="flex-row">
+                        <span class="badge success">Success</span>
+                        <span class="badge warning">Warning</span>
+                        <span class="badge error">Error</span>
+                    </div>
+                </div>
+                <div class="component-info">
+                    <div class="component-meta">
+                        <div class="component-name">Badge</div>
+                        <div class="component-variant">Success / Warning / Error</div>
+                    </div>
+                    <div class="component-actions">
+                        <button class="action-btn" onclick="toggleCode(this)" title="View Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        </button>
+                        <button class="action-btn" onclick="copyCode(this)" title="Copy Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="code-panel">
+                    <div class="code-content" data-tab="html">
+<pre><code>&lt;span class="badge success"&gt;Success&lt;/span&gt;
+&lt;span class="badge warning"&gt;Warning&lt;/span&gt;
+&lt;span class="badge error"&gt;Error&lt;/span&gt;</code></pre>
+                    </div>
+                    <div class="code-content" data-tab="css">
+<pre><code>.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.success {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.badge.warning {
+  background: var(--warning-light);
+  color: #92400e;
+}
+
+.badge.error {
+  background: var(--error-light);
+  color: var(--error);
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================== -->
+    <!-- SECTION: Cards -->
+    <!-- ======================================== -->
+    <section class="section">
+        <h2 class="section-title">Cards</h2>
+        <p class="section-desc">Content container components.</p>
+
+        <div class="component-grid">
+            <!-- Basic Card -->
+            <div class="component-card" data-component="card-basic">
+                <div class="component-preview">
+                    <div class="card">
+                        <div class="card-title">Card Title</div>
+                        <div class="card-desc">Card description text goes here.</div>
+                    </div>
+                </div>
+                <div class="component-info">
+                    <div class="component-meta">
+                        <div class="component-name">Card</div>
+                        <div class="component-variant">Basic content card</div>
+                    </div>
+                    <div class="component-actions">
+                        <button class="action-btn" onclick="toggleCode(this)" title="View Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        </button>
+                        <button class="action-btn" onclick="copyCode(this)" title="Copy Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="code-panel">
+                    <div class="code-content" data-tab="html">
+<pre><code>&lt;div class="card"&gt;
+  &lt;div class="card-title"&gt;Card Title&lt;/div&gt;
+  &lt;div class="card-desc"&gt;Card description text goes here.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    </div>
+                    <div class="code-content" data-tab="css">
+<pre><code>.card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-100);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 4px;
+}
+
+.card-desc {
+  font-size: 12px;
+  color: var(--gray-500);
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================================== -->
+    <!-- SECTION: Feedback -->
+    <!-- ======================================== -->
+    <section class="section">
+        <h2 class="section-title">Feedback</h2>
+        <p class="section-desc">User feedback and loading states.</p>
+
+        <div class="component-grid">
+            <!-- Toast -->
+            <div class="component-card" data-component="toast">
+                <div class="component-preview">
+                    <div class="toast-example">Action completed</div>
+                </div>
+                <div class="component-info">
+                    <div class="component-meta">
+                        <div class="component-name">Toast</div>
+                        <div class="component-variant">Notification message</div>
+                    </div>
+                    <div class="component-actions">
+                        <button class="action-btn" onclick="toggleCode(this)" title="View Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        </button>
+                        <button class="action-btn" onclick="copyCode(this)" title="Copy Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="code-panel">
+                    <div class="code-content" data-tab="html">
+<pre><code>&lt;div class="toast"&gt;Action completed&lt;/div&gt;</code></pre>
+                    </div>
+                    <div class="code-content" data-tab="css">
+<pre><code>.toast {
+  display: inline-block;
+  background: var(--gray-900);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 500;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spinner -->
+            <div class="component-card" data-component="spinner">
+                <div class="component-preview">
+                    <div class="spinner"></div>
+                </div>
+                <div class="component-info">
+                    <div class="component-meta">
+                        <div class="component-name">Spinner</div>
+                        <div class="component-variant">Loading indicator</div>
+                    </div>
+                    <div class="component-actions">
+                        <button class="action-btn" onclick="toggleCode(this)" title="View Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        </button>
+                        <button class="action-btn" onclick="copyCode(this)" title="Copy Code">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="code-panel">
+                    <div class="code-content" data-tab="html">
+<pre><code>&lt;div class="spinner"&gt;&lt;/div&gt;</code></pre>
+                    </div>
+                    <div class="code-content" data-tab="css">
+<pre><code>.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--gray-200);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Current modal state
+        let currentComponent = null;
+        let currentTab = 'html';
+
+        // Toggle code modal
+        function toggleCode(btn) {
+            const card = btn.closest('.component-card');
+            const codePanel = card.querySelector('.code-panel');
+            const componentName = card.querySelector('.component-name').textContent;
+
+            currentComponent = card;
+            currentTab = 'html';
+
+            // Get code content
+            const htmlContent = codePanel.querySelector('[data-tab="html"] pre code').textContent;
+            const cssContent = codePanel.querySelector('[data-tab="css"] pre code').textContent;
+
+            // Populate modal
+            document.getElementById('modalTitle').textContent = componentName;
+            document.getElementById('modalHtml').querySelector('code').textContent = htmlContent;
+            document.getElementById('modalCss').querySelector('code').textContent = cssContent;
+
+            // Reset tabs
+            document.querySelectorAll('.code-modal .code-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.code-modal .code-tab[data-tab="html"]').classList.add('active');
+            document.querySelectorAll('.code-modal .code-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('modalHtml').classList.add('active');
+
+            // Open modal
+            document.getElementById('codeModal').classList.add('open');
+        }
+
+        // Close code modal
+        function closeCodeModal() {
+            document.getElementById('codeModal').classList.remove('open');
+            currentComponent = null;
+        }
+
+        // Switch modal tab
+        function switchModalTab(btn, tab) {
+            currentTab = tab;
+            document.querySelectorAll('.code-modal .code-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.code-modal .code-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab === 'html' ? 'modalHtml' : 'modalCss').classList.add('active');
+        }
+
+        // Copy code from modal
+        function copyModalCode() {
+            const codeEl = document.getElementById(currentTab === 'html' ? 'modalHtml' : 'modalCss').querySelector('code');
+            const code = codeEl.textContent;
+
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('modalCopyBtn');
+                btn.classList.add('copied');
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy';
+                }, 2000);
+            });
+        }
+
+        // Copy code directly from card
+        function copyCode(btn) {
+            const card = btn.closest('.component-card');
+            const htmlCode = card.querySelector('.code-panel [data-tab="html"] pre code').textContent;
+
+            navigator.clipboard.writeText(htmlCode).then(() => {
+                btn.classList.add('copied');
+                showCopyToast();
+
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Show copy toast
+        function showCopyToast() {
+            const toast = document.getElementById('copyToast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Close modal on overlay click
+        document.getElementById('codeModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('codeModal')) {
+                closeCodeModal();
+            }
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCodeModal();
+            }
+        });
+    </script>
+</body>
+</html>
