@@ -1,88 +1,58 @@
-# Trace Tools Plugin
+# Claude Skills Plugin
 
-A Claude Code plugin with skills for data analysis, UI design, and development workflows at Trace.
+A Claude Code plugin with skills for data analysis, UI design, and development workflows.
 
-## Installation
+## Prerequisites
 
-### Prerequisites
+**Git and GitHub access required.** This plugin uses Git for installation and auto-updates.
 
-You need git configured with SSH access to GitHub. This allows the plugin to auto-update without password prompts.
+Ensure you have Git installed and can access GitHub repositories. If you're using SSH, verify your setup:
 
-**Check if you have SSH set up:**
 ```bash
 ssh -T git@github.com
 ```
 
-If you see "Hi username! You've successfully authenticated" you're ready. If not, follow the setup below.
+If you see "Hi username! You've successfully authenticated" you're ready.
 
-### Setting Up Git SSH Access
+---
+
+## Plugin Installation
+
+### Install in Claude Code
 
 **Mac/Linux:**
 ```bash
-# 1. Check for existing SSH key
-ls ~/.ssh/id_ed25519.pub
-
-# 2. If no key exists, create one
-ssh-keygen -t ed25519 -C "your_email@trace.com"
-
-# 3. Start SSH agent and add key
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-
-# 4. Copy public key to clipboard
-pbcopy < ~/.ssh/id_ed25519.pub   # Mac
-# or: cat ~/.ssh/id_ed25519.pub  # Linux, then copy manually
-
-# 5. Add to GitHub: Settings → SSH Keys → New SSH Key → Paste
+git clone https://github.com/RonTrace/claude-skills.git ~/.claude/plugins/claude-skills
 ```
 
 **Windows:**
 ```powershell
-# 1. Check for existing SSH key
-dir $env:USERPROFILE\.ssh\id_ed25519.pub
-
-# 2. If no key exists, create one
-ssh-keygen -t ed25519 -C "your_email@trace.com"
-
-# 3. Copy public key to clipboard
-Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub | Set-Clipboard
-
-# 4. Add to GitHub: Settings → SSH Keys → New SSH Key → Paste
+git clone https://github.com/RonTrace/claude-skills.git $env:USERPROFILE\.claude\plugins\claude-skills
 ```
 
-### Install the Plugin
+### Restart Claude Code
 
-**Mac/Linux:**
-```bash
-git clone git@github.com:tracevision/trace-tools.git ~/.claude/plugins/trace-tools
-```
-
-**Windows:**
-```powershell
-git clone git@github.com:tracevision/trace-tools.git $env:USERPROFILE\.claude\plugins\trace-tools
-```
+After cloning, restart Claude Code to load the plugin. The skills will appear in your skill library.
 
 ### Auto-Updates
 
-The plugin includes a hook that runs `git pull` every time you start Claude Code. As long as your SSH key is configured, updates happen automatically in the background.
+The plugin automatically updates when you start Claude Code. No manual intervention needed.
 
-No action needed—just start Claude Code and you'll always have the latest version.
+### Environment Setup (Optional)
 
-### Environment Setup
-
-Some skills require database credentials. Copy the template and fill in your values:
+Some skills require database credentials. Copy the template if needed:
 
 **Mac/Linux:**
 ```bash
-cp ~/.claude/plugins/trace-tools/.env.example ~/.claude/plugins/trace-tools/.env
+cp ~/.claude/plugins/claude-skills/.env.example ~/.claude/plugins/claude-skills/.env
 ```
 
 **Windows:**
 ```powershell
-Copy-Item $env:USERPROFILE\.claude\plugins\trace-tools\.env.example $env:USERPROFILE\.claude\plugins\trace-tools\.env
+Copy-Item $env:USERPROFILE\.claude\plugins\claude-skills\.env.example $env:USERPROFILE\.claude\plugins\claude-skills\.env
 ```
 
-Then edit `.env` with your credentials. Get these from your team lead or secrets manager.
+Edit `.env` with your credentials (get these from your team lead or secrets manager).
 
 ---
 
@@ -135,23 +105,28 @@ Then edit `.env` with your credentials. Get these from your team lead or secrets
 
 ## Troubleshooting
 
-**"Permission denied (publickey)" when cloning:**
-Your SSH key isn't set up. Follow the SSH setup steps above.
+**"Permission denied" when cloning:**
+Check your GitHub access and ensure you can access the repository.
 
 **Plugin not updating:**
-Check that your clone used SSH (not HTTPS):
+Check that the clone URL is correct:
 ```bash
-cd ~/.claude/plugins/trace-tools
+cd ~/.claude/plugins/claude-skills
 git remote -v
-# Should show: git@github.com:tracevision/trace-tools.git
-# If it shows https://, run:
-git remote set-url origin git@github.com:tracevision/trace-tools.git
+# Should show: https://github.com/RonTrace/claude-skills.git
 ```
 
 **Skills not appearing in Claude Code:**
-Restart Claude Code. Check that the plugin is in the correct location:
+1. Restart Claude Code
+2. Verify plugin location:
 ```bash
-ls ~/.claude/plugins/trace-tools/.claude-plugin/plugin.json
+ls ~/.claude/plugins/claude-skills/.claude-plugin/plugin.json
+```
+
+**Manual update (if auto-update fails):**
+```bash
+cd ~/.claude/plugins/claude-skills
+git pull
 ```
 
 ---
